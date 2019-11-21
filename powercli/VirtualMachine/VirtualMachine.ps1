@@ -13,13 +13,15 @@ class VirtualMachine {
     ){
         $this.PowerCLIConfiguration()
 
+        try
+
         $viServer = Connect-VIServer `
         -Server $Server `
         -Credential $Credential
         return $viServer
     }
 
-    [System.Object]New(
+    [System.Object]NewVMinteractive(
     ){
         function menu002 {
             param ()
@@ -27,6 +29,7 @@ class VirtualMachine {
             $menu002 = $null
             while ($null -eq $menu002) {
                 $menu002 = Read-Host -Prompt "Choose (Cluster) or (Host) | (End) to exit"
+                Write-Host ''
                 $menu002 = $menu002.ToLower()
                 if ($menu002 -eq 'cluster') { return $menu002 ; break }
                 elseif ($menu002 -eq 'host') { return $menu002 ; break } 
@@ -59,12 +62,38 @@ class VirtualMachine {
             $menu004 = $null
             while ($null -eq $menu004) {
                 $menu004 = Read-Host -Prompt "Choose (VM) or (Template) | (End) to exit"
+                Write-host ''
                 $menu004 = $menu004.ToLower()
                 if ($menu004 -eq 'vm') { return $menu004 ; break }
                 elseif ($menu004 -eq 'template') { return $menu004 ; break } 
                 elseif ($menu004 -eq 'end') { exit } 
                 else { $menu004 = $null }
             }
+        }
+
+        function computeDictionary {
+            param ()
+
+            $dictionary = @{}
+            $count = 0
+            $computeSizes = @(
+                @{"CPU"=1;"RAM"=2},
+                @{"CPU"=1;"RAM"=4},
+                @{"CPU"=2;"RAM"=4},
+                @{"CPU"=2;"RAM"=8},
+                @{"CPU"=4;"RAM"=8},
+                @{"CPU"=4;"RAM"=16},
+                @{"CPU"=8;"RAM"=16},
+                @{"CPU"=8;"RAM"=32}
+            )
+            Write-Host 'Select a Compute Size Below:'
+            $computeSizes | ForEach-Object {
+                $count = $count + 1
+                $computeSize = $_
+                $dictionary.Add($count, $computeSize)
+                Write-Host ($count, "  CPU :"+$computeSize['CPU'], "  RAM :"+$computeSize['RAM'])
+            }
+            return $dictionary
         }
 
         function hostDictionary {
@@ -171,6 +200,7 @@ class VirtualMachine {
             param ()
 
             $read = Read-Host -Prompt 'Enter VM (Name) | (End) to exit'
+            Write-Host ''
             $read = $read.ToLower()
             if ($read.Length -eq 0) { exit }
             elseif ($read -eq 'end') { exit }
@@ -189,8 +219,9 @@ class VirtualMachine {
 
         $vm = $null
         while ($null -eq $vm) {
-            Clear-Host
+            Write-Host ''
             $menu001 = Read-Host -Prompt '(New) or (Clone) VM | (End) to exit'
+            Write-Host ''
             $menu001 = $menu001.ToLower()
             if ($menu001 -eq 'new'){
                 $name = VmName
@@ -203,13 +234,15 @@ class VirtualMachine {
                 $location = menu003 -dictionary $locationDictionary
                 $datastoreDictionary = datastoreDictionary -resource $location
                 $datastore = menu003 -dictionary $datastoreDictionary
+                $computeDictionary = computeDictionary
+                $compute = menu003 -dictionary $computeDictionary
                 if ($type -eq 'host') { 
-                    $vm = New-VM -VMHost $location -Name $name -Datastore $datastore -Confirm:$true
+                    $vm = New-VM -VMHost $location -Name $name -Datastore $datastore -NumCpu $compute['CPU'] -MemoryGB $compute['RAM'] -Confirm:$true 
                 }
                 else { 
                     $resourcePoolDictionary = resourcePoolDictionary -resource $location
                     $location = menu003 -dictionary $resourcePoolDictionary
-                    $vm = New-VM -ResourcePool $location -Name $name -Datastore $datastore -Confirm:$true
+                    $vm = New-VM -ResourcePool $location -Name $name -Datastore $datastore -NumCpu $compute['CPU'] -MemoryGB $compute['RAM'] -Confirm:$true
                 }
             } elseif ($menu001 -eq 'clone') {
                 $menu004 = menu004
@@ -228,24 +261,30 @@ class VirtualMachine {
                 $location = menu003 -dictionary $locationDictionary
                 $datastoreDictionary = datastoreDictionary -resource $location
                 $datastore = menu003 -dictionary $datastoreDictionary
+                $computeDictionary = computeDictionary
+                $compute = menu003 -dictionary $computeDictionary
                 if ($source -eq 'vm') {
                     if ($type -eq 'host') { 
                         $vm = New-VM -VM $typeVM -VMHost $location -Name $name -Datastore $datastore -Confirm:$true
+                        Set-VM -VM $vm -NumCpu $compute['CPU'] -MemoryGB $compute['RAM'] -Confirm:$false 
                     }
                     else { 
                         $resourcePoolDictionary = resourcePoolDictionary -resource $location
                         $location = menu003 -dictionary $resourcePoolDictionary
                         $vm = New-VM -VM $typeVM -ResourcePool $location -Name $name -Datastore $datastore -Confirm:$true
+                        Set-VM -VM $vm -NumCpu $compute['CPU'] -MemoryGB $compute['RAM'] -Confirm:$false 
                     }
                 }
                 else {
                     if ($type -eq 'host') { 
                         $vm = New-VM -Template $typeVM -VMHost $location -Name $name -Datastore $datastore -Confirm:$true
+                        Set-VM -VM $vm -NumCpu $compute['CPU'] -MemoryGB $compute['RAM'] -Confirm:$false 
                     }
                     else { 
                         $resourcePoolDictionary = resourcePoolDictionary -resource $location
                         $location = menu003 -dictionary $resourcePoolDictionary
                         $vm = New-VM -Template $typeVM -ResourcePool $location -Name $name -Datastore $datastore -Confirm:$true
+                        Set-VM -VM $vm -NumCpu $compute['CPU'] -MemoryGB $compute['RAM'] -Confirm:$false 
                     }
                 }
             }
@@ -255,11 +294,3 @@ class VirtualMachine {
         return $vm
     }
 }
-
-Clear-Host
-$vm = [VirtualMachine]::new()
-$server = $vm.Server(
-    (Read-Host -Prompt 'Server'),
-    (Get-Credential)
-)
-$vm.New()
