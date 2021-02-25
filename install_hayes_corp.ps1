@@ -9,13 +9,11 @@ class installDomain {
     installDomain(){}
     
     # Methods
-    [System.Object] GetFeature(
-        $Name = $this.Name
-    ) 
+    [System.Object] GetFeature() 
     {
         try {
             $feature = Get-WindowsFeature `
-            -Name $Name `
+            -Name $this.Name `
             -ErrorAction Stop
         }
         catch {
