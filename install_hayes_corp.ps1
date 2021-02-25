@@ -9,9 +9,9 @@ class installDomain {
     # Constructors
     
     # Methods
-    [System.Object] GetFeature() 
+    [System.String] GetFeature() 
     {
-        $feature = $this.Name
+        [System.String]$feature = $this.Name
         return $feature
     }
 
