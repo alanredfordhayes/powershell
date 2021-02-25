@@ -1,11 +1,10 @@
 Import-Module ServerManager
 
-class installTestDomain {
+class installDomain {
 
     [System.String]$Name = 'AD-Domain-Services'
     [System.DateTime]$Date = (Get-Date)
-    [System.String]$Log = "log.txt"
-
+    [System.String]$Exception_Log = "Exception_Log.txt"
     [System.Object]GetFeature(
         [String]$Name
     ) 
@@ -19,7 +18,7 @@ class installTestDomain {
         catch {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.GetType().FullName
-            Add-Content -Value $ErrorMessage,$FailedItem -Path $this.Log
+            Add-Content -Value $ErrorMessage,$FailedItem -Path $this.Exception_Log
             exit 1
         }
 
