@@ -5,7 +5,7 @@ class installDomain {
     [System.String]$Name = 'AD-Domain-Services'
     [System.DateTime]$Date = (Get-Date)
     [System.String]$Exception_Log = "Exception_Log.txt"
-    
+
     [System.Object]GetFeature() 
     {
 
@@ -27,4 +27,4 @@ class installDomain {
 }
 
 $install = [installDomain]::new
-$install.GetFeature
+$install.GetFeature()
