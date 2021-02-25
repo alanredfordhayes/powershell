@@ -20,8 +20,7 @@ class installDomain {
         catch {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.GetType().FullName
-            Write-Output -InputObject $ErrorMessage, $FailedItem
-            exit 1
+            $feature = ($ErrorMessage, $FailedItem)
         }
 
         return $feature
