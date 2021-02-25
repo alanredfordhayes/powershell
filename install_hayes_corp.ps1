@@ -9,13 +9,13 @@ class installDomain {
     # Constructors
     
     # Methods
-    [System.Object]GetFeature() 
+    [System.Object] GetFeature() 
     {
-        $feature = Get-WindowsFeature -Name $this.Name
+        $feature = $this.Name
         return $feature
     }
 
 }
 
-$install = [installDomain]::new
+$install = [installDomain]::new()
 $install.GetFeature()
