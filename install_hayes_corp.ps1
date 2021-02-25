@@ -3,6 +3,8 @@ Import-Module ServerManager
 class installDomain {
 
     #Properties
+    [String]$DNS = 'DNS'
+    [String]$ADDomainServices = 'AD-Domain-Services'
 
     # Constructors
     installDomain(){}
@@ -26,7 +28,14 @@ class installDomain {
         return $feature
     }
 
+    [System.Object] GetDnsFeature(){
+        $feature = $this.GetFeature($this.DNS)
+        return $feature
+    }
+
+
+
 }
 
 $install = [installDomain]::new()
-$install.GetFeature('AD-Domain-Services')
+$install.GetDnsFeature()
