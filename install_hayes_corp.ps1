@@ -1,11 +1,14 @@
-Import-Module ServerManager
+#Import-Module ServerManager
 
 class installDomain {
 
-    [System.String]$Name = 'AD-Domain-Services'
-    [System.DateTime]$Date = (Get-Date)
-    [System.String]$Exception_Log = "Exception_Log.txt"
+    #Properties
+    static [System.String]$Name = 'AD-Domain-Services'
+    static [System.String]$Exception_Log = "Exception_Log.txt"
 
+    # Constructors
+    
+    # Methods
     [System.Object]GetFeature() 
     {
 
@@ -27,4 +30,4 @@ class installDomain {
 }
 
 $install = [installDomain]::new
-$install.Name()
+$install.GetFeature()
