@@ -3,17 +3,18 @@ Import-Module ServerManager
 class installDomain {
 
     #Properties
-    [String]$Name = 'AD-Domain-Services'
 
     # Constructors
     installDomain(){}
     
     # Methods
-    [System.Object] GetFeature() 
+    [System.Object] GetFeature(
+        [String]$Name
+    ) 
     {
         try {
             $feature = Get-WindowsFeature `
-            -Name $this.Name `
+            -Name $Name `
             -ErrorAction Stop
         }
         catch {
@@ -28,4 +29,4 @@ class installDomain {
 }
 
 $install = [installDomain]::new()
-$install.GetFeature()
+$install.GetFeature('AD-Domain-Services')
