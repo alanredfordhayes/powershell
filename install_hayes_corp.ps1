@@ -3,20 +3,15 @@ Import-Module ServerManager
 class installDomain {
 
     #Properties
-    [System.String]$Name 
-    [System.String]$Exception_Log
-    
+    static [System.String]$Name = 'AD-Domain-Services'
+
     # Constructors
-    installDomain (
-        [System.String]$Name,
-        [System.String]$Exception_Log
-    ) {
-        $this.Name = 'AD-Domain-Services'
-        $this.Exception_log = "Exception_Log.txt"
-    }
+    installDomain(){}
     
     # Methods
-    [System.Object] GetFeature() 
+    [System.Object] GetFeature(
+        $Name
+    ) 
     {
         try {
             $feature = Get-WindowsFeature `
