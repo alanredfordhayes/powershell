@@ -13,7 +13,7 @@ class installDomain {
     {
 
         try {
-            $feature = Get-WindowsFeature `
+            [System.Object]$feature = Get-WindowsFeature `
             -Name $this.Name `
             -ErrorAction Stop `
         }
