@@ -27,4 +27,4 @@ class installDomain {
 }
 
 $install = [installDomain]::new
-$install.GetFeature()
+$install.Name()
