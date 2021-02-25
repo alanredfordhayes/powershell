@@ -9,10 +9,11 @@ class installDomain {
     # Constructors
     
     # Methods
-    [System.Object] GetFeature() 
+    [ Microsoft.Windows.ServerManager.Commands.Feature] GetFeature() 
     {
         try {
-            [System.Object]$feature = Get-WindowsFeature `
+            [ Microsoft.Windows.ServerManager.Commands.Feature]
+            $feature = Get-WindowsFeature `
             -Name $this.Name `
             -ErrorAction Stop
         }
