@@ -3,7 +3,7 @@ Import-Module ServerManager
 class installDomain {
 
     #Properties
-    static [System.String]$Name = 'AD-Domain-Services'
+    [String]$Name = 'AD-Domain-Services'
 
     # Constructors
     installDomain(){}
