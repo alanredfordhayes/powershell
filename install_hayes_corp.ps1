@@ -11,8 +11,18 @@ class installDomain {
     # Methods
     [System.Object] GetFeature() 
     {
-        [System.Object]$feature = Get-WindowsFeature `
-        -Name $this.Name
+        try {
+            [System.Object]$feature = Get-WindowsFeature `
+            -Name $this.Name `
+            -ErrorAction Stop
+        }
+        catch {
+            $ErrorMessage = $_.Exception.Message
+            $FailedItem = $_.Exception.GetType().FullName
+            Write-Output -InputObject $ErrorMessage, $FailedItem
+            exit 1
+        }
+
         return $feature
     }
 
