@@ -10,12 +10,12 @@ class installDomain {
     
     # Methods
     [System.Object] GetFeature(
-        $Name
+        $Name = $this.Name
     ) 
     {
         try {
             $feature = Get-WindowsFeature `
-            -Name $this.Name `
+            -Name $Name `
             -ErrorAction Stop
         }
         catch {
