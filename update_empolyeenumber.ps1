@@ -4,6 +4,9 @@ $log = "$name.txt"
 $home_dir = "~"
 $documents_dir = "Documents" 
 $downloads_dir = "Downloads"
+$local_csv_path = ".\$name.csv"
+$document_csv_path = "$home_dir\$documents_dir\$name.csv"
+$download_csv_path = "$home_dir\$downloads_dir\$name.csv"
 
 function Import_CSV {
     param (
@@ -12,19 +15,16 @@ function Import_CSV {
         [String]$log,
         [String]$home_dir,
         [String]$documents_dir,
-        [String]$downloads_dir
+        [String]$downloads_dir,
+        [String]$local_csv_path,
+        [String]$document_csv_path,
+        [String]$download_csv_path
     )
     
-    if ( Test-Path -Path ".\$name.csv" ) {
-        try { $csv = Import-Csv -Path ".\$name.csv" -ErrorAction Continue
-        } catch { $date + $_.Exception >> $log }
-    } elseif ( Test-Path -Path "$home_dir\$documents_dir\$name.csv" ) {
-        try { $csv = Import-Csv -Path "$home_dir\$documents_dir\$name.csv" -ErrorAction Continue
-        } catch { $date + $_.Exception >> $log }   
-    } elseif ( Test-Path -Path "$home_dir\$downloads_dir\$name.csv" ) {
-        try { $csv = Import-Csv -Path "$home_dir\$downloads_dir\$name.csv" -ErrorAction Continue } 
-        catch { $date + $_.Exception >> $log }
-    } else {
+    if ( Test-Path -Path $local_csv_path ) { $csv_path = $local_csv_path } 
+    elseif ( Test-Path -Path $document_csv_path  ) { $csv_path = $document_csv_path } 
+    elseif ( Test-Path -Path document_csv_path ) { $csv_path = $document_csv_path } 
+    else {
         Write-Output "Cannot find file to import."
         Write-Output "Please drop a file with name of $name.csv in this directory or the following directories:"
         Write-Output ".\$name.csv"
@@ -34,9 +34,14 @@ function Import_CSV {
         break
     }
     
-    return $csv
+    $first_line_csv = Get-Content -Path $csv_path -First 1
+    $first_line_csv.Replace(" ","_")
+    return $first_line_csv
 
 }
 
-Import_CSV -name $name -date $date -log $log -home_dir $home_dir -documents_dir $documents_dir -downloads_dir $downloads_dir
+$csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -documents_dir $documents_dir -downloads_dir $downloads_dir
 
+$csv | ForEach-Object {
+    $_
+}
