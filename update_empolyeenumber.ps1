@@ -23,7 +23,7 @@ function Import_CSV {
     
     if ( Test-Path -Path $local_csv_path ) { $csv_path = $local_csv_path } 
     elseif ( Test-Path -Path $document_csv_path  ) { $csv_path = $document_csv_path } 
-    elseif ( Test-Path -Path document_csv_path ) { $csv_path = $document_csv_path } 
+    elseif ( Test-Path -Path $download_csv_path ) { $csv_path = $download_csv_path } 
     else {
         Write-Output "Cannot find file to import."
         Write-Output "Please drop a file with name of $name.csv in this directory or the following directories:"
