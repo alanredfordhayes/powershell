@@ -7,13 +7,13 @@ $downloads_dir = "Downloads"
 
 
 if ( Test-Path -Path ".\$name.csv" ) {
-    try { Import-Csv -Path ".\$name.csv" -ErrorAction Continue
+    try { $csv = Import-Csv -Path ".\$name.csv" -ErrorAction Continue
     } catch { $date + $_.Exception >> $log }
 } elseif ( Test-Path -Path "$home_dir\$documents_dir\$name.csv" ) {
-    try { Import-Csv -Path "$home_dir\$documents_dir\$name.csv" -ErrorAction Continue
+    try { $csv = Import-Csv -Path "$home_dir\$documents_dir\$name.csv" -ErrorAction Continue
     } catch { $date + $_.Exception >> $log }   
 } elseif ( Test-Path -Path "$home_dir\$downloads_dir\$name.csv" ) {
-    try { Import-Csv -Path "$home_dir\$downloads_dir\$name.csv" -ErrorAction Continue } 
+    try { $csv = Import-Csv -Path "$home_dir\$downloads_dir\$name.csv" -ErrorAction Continue } 
     catch { $date + $_.Exception >> $log }
 } else {
     Write-Output "Cannot find file to import."
@@ -24,3 +24,5 @@ if ( Test-Path -Path ".\$name.csv" ) {
     Write-Output "$home_dir\$downloads_dir\$name.csv"
     break
 }
+
+$csv
