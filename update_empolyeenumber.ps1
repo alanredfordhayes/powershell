@@ -57,4 +57,6 @@ function Import_CSV {
 
 $csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -documents_dir $documents_dir -downloads_dir $downloads_dir -local_csv_path $local_csv_path -document_csv_path $document_csv_path -download_csv_path $download_csv_path
 
-$csv
+$csv | ForEach-Object {
+    $_
+}
