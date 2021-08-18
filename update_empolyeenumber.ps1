@@ -74,7 +74,8 @@ function Update_EmployeeNumber {
         $user = $users_list | Where-Object -Property mail -eq $email_address
 
         if ($null -eq $user) {
-            $email_address.Split("@")
+            $emailAddressArray = $email_address.Split("@")
+            $emailAddressArray[0]
 
         }
 
