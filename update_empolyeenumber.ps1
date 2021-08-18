@@ -63,10 +63,6 @@ function Import_CSV {
 $csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -documents_dir $documents_dir -downloads_dir $downloads_dir -local_csv_path $local_csv_path -document_csv_path $document_csv_path -download_csv_path $download_csv_path
 
 $csv | ForEach-Object {
-    $Employee_Name = $_.Employee_Name
-    $Employee_NameArray = $Employee_Name.Split(" ")
-    $firstInitial = $Employee_NameArray[0].substring(0,1)
-    $username = $firstInitial + $Employee_NameArray[1]
-    $username = $username.ToLower()
-    Get-AdUser $username
+    $Email_Address = $_.Email_Address
+    $Email_Address
 }
