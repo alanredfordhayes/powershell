@@ -65,7 +65,7 @@ function Update_EmployeeNumber {
         [System.Array]$csv
     )
 
-    $users_list = Get-AdUser -Filter * -Properties mail, employeenumber
+    $users_list = Get-AdUser -Filter * -Properties mail, employeenumber, proxyAddresses
 
     $csv | ForEach-Object {
         $employeenumber = $_.Employee_Number
@@ -74,9 +74,10 @@ function Update_EmployeeNumber {
         $user = $users_list | Where-Object -Property mail -eq $email_address
 
         if ($null -eq $user) {
-            $emailAddressArray = $email_address.Split("@")
-            $upn = $emailAddressArray[0] + "@dash.corp"
-            $user = $users_list | Where-Object -Property UserPrincipalName -eq $upn
+            $users_list | ForEach-Object {
+                $proxyAddresses = $_.proxyAddresses
+                $proxyAddresses.gettype()
+            }
         }
 
         if ($user.employeenumber -ne $employeenumber) {
