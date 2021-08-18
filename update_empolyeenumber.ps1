@@ -46,7 +46,7 @@ function Import_CSV {
         }
     }
 
-    $csv = Import-Csv $name.csv
+    $csv = Import-Csv "$home_dir\$documents_dir\$name.csv"
     return $csv
 
 }
