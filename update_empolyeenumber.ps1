@@ -34,19 +34,23 @@ function Import_CSV {
         break
     }
     
+    if ( Test-Path -Path "$home_dir\AppData\Local\Temp\$name.csv") {
+        try { Remove-Item -Path "$home_dir\AppData\Local\Temp\$name.csv" -ErrorAction Continue }
+        catch { $date >> $log ; $_.Exception >> $log ; "" >> $log }
+    }
+
     $csv_content = Get-Content -Path $csv_path -First 1
     $csv_content | ForEach-Object {
         $line = $_
         $first_line = Get-Content -Path $csv_path -First 1
         if ($line -eq $first_line){ 
-            $line = $line.Replace(" ","_")
-            $line > "$home_dir\$documents_dir\$name.csv"
-        } else {
-            $line >> "$home_dir\$documents_dir\$name.csv"
-        }
+            $line = $line.Replace(" ","_")            
+        } 
+
+        $line >> "$home_dir\AppData\Local\Temp\$name.csv"
     }
 
-    $csv = Import-Csv "$home_dir\$documents_dir\$name.csv"
+    $csv = Import-Csv "$home_dir\AppData\Local\Temp\$name.csv"
     return $csv
 
 }
