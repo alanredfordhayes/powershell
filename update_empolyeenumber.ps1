@@ -48,8 +48,8 @@ function Import_CSV {
             $lineArray = $line.Split(",")
             $Employee_Name = $lineArray[1]
             $Employee_NameArray = $Employee_Name.Split("_")
-            $Employee_Name = $Employee_NameArray[0] + "_Name"
-            $line = $lineArray[0] + "," + $Employee_Name + "," + $lineArray[2] + "," + $lineArray[3] + "," + $lineArray[4]
+            $Employee_Name = $Employee_NameArray[0] + "_" + $Employee_NameArray[1]
+            $line = $lineArray[0] + "," + $Employee_Name + "," + $lineArray[3] + "," + $lineArray[4] + "," + $lineArray[5]
         } 
 
         $line >> "$home_dir\AppData\Local\Temp\$name.csv"
