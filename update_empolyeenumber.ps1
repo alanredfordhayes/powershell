@@ -78,7 +78,7 @@ function Update_EmployeeNumber {
                 $proxyAddresses = $_.proxyAddresses
                 $smtp = "smtp:$email_address"
                 if ($proxyAddresses.Contains($smtp)) {
-                    $_
+                    $user = $_
                 }
             }
         }
