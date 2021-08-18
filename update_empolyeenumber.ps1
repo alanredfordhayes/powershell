@@ -34,8 +34,24 @@ function Import_CSV {
         break
     }
     
-    $first_line_csv = Get-Content -Path $csv_path -First 1
-    $first_line_csv.Replace(" ","_")
+    $csv_content = Get-Content -Path $csv_path -First 1
+    $csv_content | ForEach-Object {
+        $line = $_
+        $first_line = Get-Content -Path $csv_path -First 1
+        if ($line -eq $first_line){ 
+            $line = $line.Replace(" ","_")
+            $line > $name.csv
+        } else {
+            $line >> $name.csv
+        }
+    }
+    
+    try {
+        Import-Csv -Path .\
+    }
+    catch {
+        
+    }
     return $first_line_csv
 
 }
