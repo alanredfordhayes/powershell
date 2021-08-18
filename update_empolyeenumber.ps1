@@ -74,7 +74,7 @@ function Update_EmployeeNumber {
         $user = $users_list | Where-Object -Property mail -eq $email_address
         if ($user.employeenumber -ne $employeenumber) {
             Write-Output "Updating User: $employeename"
-            try { Set-AdUser $user -EmployeeNumber $employeenumber -ErrorAction Continue }
+            try { Set-AdUser $user.DistinguishedName -EmployeeNumber $employeenumber -ErrorAction Continue }
             catch { Write-Output "Error on User: $employeename" ; $date >> $log ; $_.Exception >> $log ; "" >> $log }
         } else {
             Write-Output "EmployeeNumber for User: $employeename is Good."
