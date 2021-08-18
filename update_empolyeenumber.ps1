@@ -40,9 +40,9 @@ function Import_CSV {
         $first_line = Get-Content -Path $csv_path -First 1
         if ($line -eq $first_line){ 
             $line = $line.Replace(" ","_")
-            $line > $name.csv
+            $line > "$home_dir\$documents_dir\$name.csv"
         } else {
-            $line >> $name.csv
+            $line >> "$home_dir\$documents_dir\$name.csv"
         }
     }
 
