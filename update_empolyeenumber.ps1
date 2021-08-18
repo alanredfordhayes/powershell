@@ -80,7 +80,7 @@ function Update_EmployeeNumber {
         }
 
         if ($user.employeenumber -ne $employeenumber) {
-
+            $user
             Write-Output "Updating User: $employeename"
             try { Set-AdUser $user.DistinguishedName -EmployeeNumber $employeenumber -ErrorAction Continue }
             catch { Write-Output "Error on User: $employeename" ; $Exception = $_.Exception ; "$date | $Exception " >> $log }
