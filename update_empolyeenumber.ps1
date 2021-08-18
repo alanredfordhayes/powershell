@@ -89,7 +89,7 @@ function Update_EmployeeNumber {
             }
         } 
 
-        if ($user.gettype().basetype.name -eq "Array") {
+        if (($null -eq $user) -and ($user.gettype().basetype.name -eq "Array")) {
             $user = $user | Where-Object -Property Enabled -eq "True"
         }
 
