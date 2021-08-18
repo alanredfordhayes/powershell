@@ -64,5 +64,7 @@ $csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -documen
 
 $csv | ForEach-Object {
     $Email_Address = $_.Email_Address
-    $Email_Address
+    $Email_AddressArray = $Email_Address.Split("@")
+    $username = $Email_AddressArray[0]
+    $username
 }
