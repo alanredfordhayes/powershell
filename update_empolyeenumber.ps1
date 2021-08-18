@@ -69,6 +69,7 @@ $csv | ForEach-Object {
     $email_address = $_.Email_Address
     $user = $users_list | Where-Object -Property mail -eq $email_address
     if ($user.employeenumber -ne $employeenumber) {
-        $user
+        try { Get-AdUser $user | Set-AdUser -EmployeeNumber $employeenumber -ErrorAction Continue }
+        catch { $date >> $log ; $_.Exception >> $log ; "" >> $log }
     }
 }
