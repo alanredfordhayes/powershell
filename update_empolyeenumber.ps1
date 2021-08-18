@@ -72,28 +72,27 @@ function Update_EmployeeNumber {
         $employeename = $_.Employee_Name 
         $email_address = $_.Email_Address
         $user = $users_list | Where-Object -Property mail -eq $email_address
-
-        if ($null -eq $user) {
-            $email_address_array = $email_address.Split("@")
-            $upn = $email_address_array[0] + "@dash.corp"
-            $user = $users_list | Where-Object -Property UserPrincipalName -eq $upn
-        }
-
-        if ($null -eq $user) {
-            $users_list | ForEach-Object {
-                $proxyAddresses = $_.proxyAddresses
-                $smtp = "smtp:$email_address"
-                if ($proxyAddresses.Contains($smtp)) {
-                    $user = $_
-                }
-            }
-        } 
-
-        if (($null -ne $user) -and ($user.gettype().basetype.name -eq "Array")) {
-            $user = $user | Where-Object -Property Enabled -eq "True"
-        }
-
         if ($user.employeenumber -ne $employeenumber) {
+            if ($null -eq $user) {
+                $email_address_array = $email_address.Split("@")
+                $upn = $email_address_array[0] + "@dash.corp"
+                $user = $users_list | Where-Object -Property UserPrincipalName -eq $upn
+            }
+    
+            if ($null -eq $user) {
+                $users_list | ForEach-Object {
+                    $proxyAddresses = $_.proxyAddresses
+                    $smtp = "smtp:$email_address"
+                    if ($proxyAddresses.Contains($smtp)) {
+                        $user = $_
+                    }
+                }
+            } 
+
+            if (($null -ne $user) -and ($user.gettype().basetype.name -eq "Array")) {
+                $user = $user | Where-Object -Property Enabled -eq "True"
+            }
+    
             $user
             Write-Output "Updating User: $employeename"
             try { Set-AdUser $user.DistinguishedName -EmployeeNumber $employeenumber -ErrorAction Continue }
