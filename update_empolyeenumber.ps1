@@ -69,11 +69,15 @@ function Update_EmployeeNumber {
 
     $csv | ForEach-Object {
         $employeenumber = $_.Employee_Number
+        $employeename = $_.Employee_Name 
         $email_address = $_.Email_Address
         $user = $users_list | Where-Object -Property mail -eq $email_address
         if ($user.employeenumber -ne $employeenumber) {
+            Write-Output "Updating User: $employeename"
             try { Get-AdUser $user | Set-AdUser -EmployeeNumber $employeenumber -ErrorAction Continue }
-            catch { $date >> $log ; $_.Exception >> $log ; "" >> $log }
+            catch { Write-Output "Error on User: $employeename" ; $date >> $log ; $_.Exception >> $log ; "" >> $log }
+        } else {
+            Write-Output "EmployeeNumber for User: $employeename is Good."
         }
     }
     
