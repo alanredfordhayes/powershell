@@ -76,7 +76,7 @@ function Update_EmployeeNumber {
         if ($null -eq $user) {
             $emailAddressArray = $email_address.Split("@")
             $upn = $emailAddressArray[0] + "@dash.corp"
-            $upn
+            $user = $users_list | Where-Object -Property UserPrincipalName -eq $upn
         }
 
         if ($user.employeenumber -ne $employeenumber) {
