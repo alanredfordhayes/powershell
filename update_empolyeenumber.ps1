@@ -46,9 +46,9 @@ function Import_CSV {
         if ($line -eq $first_line){ 
             $line = $line.Replace(" ","_")
             $lineArray = $line.Split(",")
-            $Employee_Name = $lineArray[1]
-            $Employee_NameArray = $Employee_Name.Split("_")
-            $Employee_Name = $Employee_NameArray[0].substring(1) + "_" + $Employee_NameArray[1]
+            $employee_Name = $lineArray[1]
+            $employee_NameArray = $Employee_Name.Split("_")
+            $employee_Name = $employee_NameArray[0].substring(1) + "_" + $employee_NameArray[1]
             $line = $lineArray[0] + "," + $Employee_Name + "," + $lineArray[3] + "," + $lineArray[4] + "," + $lineArray[5]
         } 
 
@@ -62,10 +62,13 @@ function Import_CSV {
 
 $csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -documents_dir $documents_dir -downloads_dir $downloads_dir -local_csv_path $local_csv_path -document_csv_path $document_csv_path -download_csv_path $download_csv_path
 
-$users_list = Get-AdUser -Filter * -Properties mail
+$users_list = Get-AdUser -Filter * -Properties mail, employeenumber
 
 $csv | ForEach-Object {
-    $Email_Address = $_.Email_Address
-    $user = $users_list | Where-Object -Property mail -eq $Email_Address
-    $user
+    $employeenumber = $_.Employee_Number
+    $email_address = $_.Email_Address
+    $user = $users_list | Where-Object -Property mail -eq $email_address
+    if ($user.employeenumber -ne $employeenumber) {
+        $user
+    }
 }
