@@ -76,7 +76,9 @@ function Update_EmployeeNumber {
         if ($null -eq $user) {
             $users_list | ForEach-Object {
                 $proxyAddresses = $_.proxyAddresses
-                $proxyAddresses.gettype()
+                if ($proxyAddresses.Contains($email_address)) {
+                    $_
+                }
             }
         }
 
