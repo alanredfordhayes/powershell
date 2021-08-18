@@ -89,6 +89,10 @@ function Update_EmployeeNumber {
             }
         } 
 
+        if ($user.gettype().basetype.name -eq "Array") {
+            $user = $user | Where-Object -Property Enabled -eq "True"
+        }
+
         if ($user.employeenumber -ne $employeenumber) {
             $user
             Write-Output "Updating User: $employeename"
