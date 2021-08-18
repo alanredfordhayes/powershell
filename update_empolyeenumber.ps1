@@ -62,9 +62,10 @@ function Import_CSV {
 
 $csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -documents_dir $documents_dir -downloads_dir $downloads_dir -local_csv_path $local_csv_path -document_csv_path $document_csv_path -download_csv_path $download_csv_path
 
+$users_list = Get-AdUser -Filter * -Properties mail
+
 $csv | ForEach-Object {
     $Email_Address = $_.Email_Address
-    $Email_AddressArray = $Email_Address.Split("@")
-    $username = $Email_AddressArray[0]
-    $username
+    $user = $users_list | Where-Object -Property mail -eq $Email_Address
+    $user
 }
