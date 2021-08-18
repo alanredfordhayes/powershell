@@ -39,7 +39,7 @@ function Import_CSV {
         catch { $date >> $log ; $_.Exception >> $log ; "" >> $log }
     }
 
-    $csv_content = Get-Content -Path $csv_path -First 1
+    $csv_content = Get-Content -Path $csv_path
     $csv_content | ForEach-Object {
         $line = $_
         $first_line = Get-Content -Path $csv_path -First 1
