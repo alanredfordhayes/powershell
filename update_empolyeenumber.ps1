@@ -74,6 +74,12 @@ function Update_EmployeeNumber {
         $user = $users_list | Where-Object -Property mail -eq $email_address
 
         if ($null -eq $user) {
+            $email_address_array = $email_address.Split("@")
+            $upn = $email_address_array[0] + "@dash.corp"
+            $user = $users_list | Where-Object -Property UserPrincipalName -eq $upn
+        }
+
+        if ($null -eq $user) {
             $users_list | ForEach-Object {
                 $proxyAddresses = $_.proxyAddresses
                 $smtp = "smtp:$email_address"
@@ -81,7 +87,7 @@ function Update_EmployeeNumber {
                     $user = $_
                 }
             }
-        }
+        } 
 
         if ($user.employeenumber -ne $employeenumber) {
             $user
