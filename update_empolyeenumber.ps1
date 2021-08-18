@@ -67,5 +67,6 @@ $csv | ForEach-Object {
     $Employee_NameArray = $Employee_Name.Split(" ")
     $firstInitial = $Employee_NameArray[0].substring(0,1)
     $username = $firstInitial + $Employee_NameArray[1]
-    $username
+    $username = $username.ToLower()
+    Get-AdUser $username
 }
