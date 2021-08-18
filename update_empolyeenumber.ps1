@@ -60,16 +60,24 @@ function Import_CSV {
 
 }
 
-$csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -documents_dir $documents_dir -downloads_dir $downloads_dir -local_csv_path $local_csv_path -document_csv_path $document_csv_path -download_csv_path $download_csv_path
+function Update_EmployeeNumber {
+    param (
+        [System.Array]$csv
+    )
 
-$users_list = Get-AdUser -Filter * -Properties mail, employeenumber
+    $users_list = Get-AdUser -Filter * -Properties mail, employeenumber
 
-$csv | ForEach-Object {
-    $employeenumber = $_.Employee_Number
-    $email_address = $_.Email_Address
-    $user = $users_list | Where-Object -Property mail -eq $email_address
-    if ($user.employeenumber -ne $employeenumber) {
-        try { Get-AdUser $user | Set-AdUser -EmployeeNumber $employeenumber -ErrorAction Continue }
-        catch { $date >> $log ; $_.Exception >> $log ; "" >> $log }
+    $csv | ForEach-Object {
+        $employeenumber = $_.Employee_Number
+        $email_address = $_.Email_Address
+        $user = $users_list | Where-Object -Property mail -eq $email_address
+        if ($user.employeenumber -ne $employeenumber) {
+            try { Get-AdUser $user | Set-AdUser -EmployeeNumber $employeenumber -ErrorAction Continue }
+            catch { $date >> $log ; $_.Exception >> $log ; "" >> $log }
+        }
     }
+    
 }
+
+$csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -documents_dir $documents_dir -downloads_dir $downloads_dir -local_csv_path $local_csv_path -document_csv_path $document_csv_path -download_csv_path $download_csv_path
+Update_EmployeeNumber -csv $csv
