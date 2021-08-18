@@ -36,7 +36,7 @@ function Import_CSV {
     
     if ( Test-Path -Path "$home_dir\AppData\Local\Temp\$name.csv") {
         try { Remove-Item -Path "$home_dir\AppData\Local\Temp\$name.csv" -ErrorAction Continue }
-        catch { $date >> $log ; $_.Exception >> $log ; "" >> $log }
+        catch { $Exception = $_.Exception ; "$date | $Exception " >> $log }
     }
 
     $csv_content = Get-Content -Path $csv_path
@@ -72,11 +72,18 @@ function Update_EmployeeNumber {
         $employeename = $_.Employee_Name 
         $email_address = $_.Email_Address
         $user = $users_list | Where-Object -Property mail -eq $email_address
+
+        if ($null -eq $user) {
+            $email_addressArray = $email_address.Split{"@"}
+            $email_addressArray[0] + "@dash.corp"
+
+        }
+
         if ($user.employeenumber -ne $employeenumber) {
-            $email_address
+
             Write-Output "Updating User: $employeename"
             try { Set-AdUser $user.DistinguishedName -EmployeeNumber $employeenumber -ErrorAction Continue }
-            catch { Write-Output "Error on User: $employeename" ; $date >> $log ; $_.Exception >> $log ; "" >> $log }
+            catch { Write-Output "Error on User: $employeename" ; $Exception = $_.Exception ; "$date | $Exception " >> $log }
         } else {
             Write-Output "EmployeeNumber for User: $employeename is Good."
         }
