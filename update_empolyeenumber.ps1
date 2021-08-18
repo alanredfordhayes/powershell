@@ -65,7 +65,7 @@ $csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -documen
 $csv | ForEach-Object {
     $Employee_Name = $_.Employee_Name
     $Employee_NameArray = $Employee_Name.Split(" ")
-    $firstInitial = $Employee_NameArray[0].substring(0,($Employee_NameArray[0].Length - 1))
+    $firstInitial = $Employee_NameArray[0].substring(0,1)
     $username = $firstInitial + $Employee_NameArray[1]
     $username
 }
