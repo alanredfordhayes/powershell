@@ -72,9 +72,8 @@ function Update_EmployeeNumber {
         $employeename = $_.Employee_Name 
         $email_address = $_.Email_Address
         $user = $users_list | Where-Object -Property mail -eq $email_address
-        $user
         if ($user.employeenumber -ne $employeenumber) {
-            $user
+            $email_address
             Write-Output "Updating User: $employeename"
             try { Set-AdUser $user.DistinguishedName -EmployeeNumber $employeenumber -ErrorAction Continue }
             catch { Write-Output "Error on User: $employeename" ; $date >> $log ; $_.Exception >> $log ; "" >> $log }
