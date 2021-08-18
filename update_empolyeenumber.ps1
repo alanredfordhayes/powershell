@@ -97,7 +97,7 @@ function Update_EmployeeNumber {
             $user
             Write-Output "Updating User: $employeename"
             try { Set-AdUser $user.DistinguishedName -EmployeeNumber $employeenumber -ErrorAction Continue }
-            catch { Write-Output "Error on User: $employeename" ; $Exception = $_.Exception ; "$date | $Exception " >> $log }
+            catch { Write-Output "Error on User: $employeename" ; $Exception = $_.Exception ; "$date | $employeename | $Exception " >> $log }
         } else {
             Write-Output "EmployeeNumber for User: $employeename is Good."
         }
