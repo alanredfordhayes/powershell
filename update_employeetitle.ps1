@@ -23,7 +23,7 @@ function Import_CSV {
     $csv_content = Get-Content -Path "$home_dir\AppData\Local\Temp\$filename.csv"
     $csv_content | ForEach-Object {
         $line = $_
-        $first_line = Get-Content -Path "$home_dir\AppData\Local\Temp\$name.csv" -First 1
+        $first_line = Get-Content -Path "$home_dir\AppData\Local\Temp\$filename.csv" -First 1
         if ($line -eq $first_line){ 
             $line = $line.Replace(" ","_")
             $lineArray = $line.Split(",")
