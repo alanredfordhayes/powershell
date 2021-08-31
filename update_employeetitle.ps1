@@ -128,6 +128,6 @@ if ($null -ne $local_filename_check) {
 }
 
 if ($untouched_csv.GetType().BaseType.FullName -eq "System.Array") {
-    $untouched_csv = $untouched_csv | Sort-Object -Property LastWriteTime
+    $untouched_csv = $untouched_csv | Sort-Object -Property LastWriteTime -Descending
     $untouched_csv[0]
 }
