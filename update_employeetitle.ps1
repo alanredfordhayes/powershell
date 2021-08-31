@@ -135,9 +135,9 @@ function copy_ToTemp {
 
     if ($untouched_csv.GetType().BaseType.FullName -eq "System.Array") {
         $untouched_csv = $untouched_csv | Sort-Object -Property LastWriteTime -Descending
-        $untouched_csv[0] | Copy-Item -Destination "$home_dir\AppData\Local\Temp\$filename.csv"
+        $untouched_csv[0] | Copy-Item -Destination "$home_dir\AppData\Local\Temp\$filename.csv" -Force
     } else {
-        $untouched_csv | Copy-Item -Destination "$home_dir\AppData\Local\Temp\$filename.csv"
+        $untouched_csv | Copy-Item -Destination "$home_dir\AppData\Local\Temp\$filename.csv" -Force
     }
     
 }
