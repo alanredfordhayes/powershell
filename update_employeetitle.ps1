@@ -11,7 +11,8 @@ function Import_CSV {
         [String]$name,
         [System.DateTime]$date,
         [String]$log,
-        [String]$home_dir
+        [String]$home_dir,
+        [String]$filename
     )
 
     if ( Test-Path -Path "$home_dir\AppData\Local\Temp\$name.csv") {
@@ -126,5 +127,5 @@ function copy_ToTemp {
 }
 
 copy_ToTemp -filename $filename -home_dir $home_dir -downloads_dir $downloads_dir
-$csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir
+$csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -filename $filename
 $csv
