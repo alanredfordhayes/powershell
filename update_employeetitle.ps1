@@ -127,4 +127,4 @@ if ($null -ne $local_filename_check) {
     break
 }
 
-$untoched_csv.GetType().BaseType.FullName
+$untoched_csv.GetType().BaseType.FullName -eq "System.Array"
