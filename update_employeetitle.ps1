@@ -134,7 +134,7 @@ function copy_ToTemp {
     }
 
     if ( Test-Path -Path "$home_dir\AppData\Local\Temp\$filename.csv") {
-        try { Remove-Item -Path "$home_dir\AppData\Local\Temp\$name.csv" -ErrorAction Continue }
+        try { Remove-Item -Path "$home_dir\AppData\Local\Temp\$filename.csv" -ErrorAction Continue }
         catch { $Exception = $_.Exception ; "$date | $Exception " >> $log }
     }
 
