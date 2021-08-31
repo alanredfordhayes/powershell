@@ -133,11 +133,16 @@ function copy_ToTemp {
         break
     }
 
+    if ( Test-Path -Path "$home_dir\AppData\Local\Temp\$filename.csv") {
+        try { Remove-Item -Path "$home_dir\AppData\Local\Temp\$name.csv" -ErrorAction Continue }
+        catch { $Exception = $_.Exception ; "$date | $Exception " >> $log }
+    }
+
     if ($untouched_csv.GetType().BaseType.FullName -eq "System.Array") {
         $untouched_csv = $untouched_csv | Sort-Object -Property LastWriteTime -Descending
         $untouched_csv[0] | Copy-Item -Destination "$home_dir\AppData\Local\Temp\$filename.csv" -Force
     } else {
-        $untouched_csv | Copy-Item -Destination "$home_dir\AppData\Local\Temp\$filename.csv" -Force
+        $untouched_csv | Copy-Item -Destination "$home_dir\AppData\Local\Temp\$filename.csv" -Force -
     }
     
 }
