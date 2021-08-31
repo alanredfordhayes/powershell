@@ -108,5 +108,5 @@ function Update_Title {
     
 }
 
-$local_items = Get-ChildItem -Path ".\" | Where-Object -Property Name -Match $name
+$local_items = (Get-ChildItem -Path ".\" | Where-Object -Property Name -Match $name).Name -eq "$name.ps1"
 $local_items
