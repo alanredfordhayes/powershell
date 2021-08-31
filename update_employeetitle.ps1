@@ -113,11 +113,11 @@ $downloads_dir_check  = Get-ChildItem -Path "$home_dir\$downloads_dir" | Where-O
 $documents_dir_check = Get-ChildItem -Path "$home_dir\$documents_dir" | Where-Object -Property Name -Match $filename
 
 if ($null -ne $local_filename_check) {
-    $untoched_csv = $local_filename_check
+    $untouched_csv = $local_filename_check
 } elseif ($null -ne $downloads_dir_check) {
-    $untoched_csv = $downloads_dir_check
+    $untouched_csv = $downloads_dir_check
 } elseif ($null -ne $documents_dir_check) {
-    $untoched_csv = $documents_dir_check
+    $untouched_csv = $documents_dir_check
 } else {
     Write-Output "Cannot find file to import."
     Write-Output "Please drop a file with name of $filename.csv in this directory or the following directories:"
@@ -127,4 +127,7 @@ if ($null -ne $local_filename_check) {
     break
 }
 
-$untoched_csv.GetType().BaseType.FullName -eq "System.Array"
+if ($untouched_csv.GetType().BaseType.FullName -eq "System.Array") {
+    $untouched_csv = $untouched_csv | Sort-Object -Property LastWriteTime
+    $untouched_csv[0]
+}
