@@ -109,17 +109,20 @@ function Update_Title {
 }
 
 $local_filename_check = Get-ChildItem -Path ".\" | Where-Object -Property Name -Match $filename
+$downloads_dir_check  = Get-ChildItem -Path "$home_dir\$downloads_dir" | Where-Object -Property Name -Match $filename
+$documents_dir_check = Get-ChildItem -Path "$home_dir\$documents_dir" | Where-Object -Property Name -Match $filename
+
 if ($null -ne $local_filename_check) {
     $local_filename_check
-}
-
-$downloads_dir_check  = Get-ChildItem -Path "$home_dir\$downloads_dir" | Where-Object -Property Name -Match $filename
-if ($null -ne $downloads_dir_check) {
+} elseif ($null -ne $downloads_dir_check) {
     $downloads_dir_check
-}
-
-$documents_dir_check = Get-ChildItem -Path "$home_dir\$documents_dir" | Where-Object -Property Name -Match $filename
-if ($null -ne $documents_dir_check) {
+} elseif ($null -ne $documents_dir_check) {
     $documents_dir_check
+} else {
+    Write-Output "Cannot find file to import."
+    Write-Output "Please drop a file with name of $filename.csv in this directory or the following directories:"
+    Write-Output ".\$filename.csv"
+    Write-Output "$home_dir\$documents_dir\$filename.csv"
+    Write-Output "$home_dir\$downloads_dir\$filename.csv"
+    break
 }
-
