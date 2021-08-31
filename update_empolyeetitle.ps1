@@ -109,3 +109,4 @@ function Update_Title {
 }
 
 $local_items = Get-ChildItem -Path ".\"
+$local_items
