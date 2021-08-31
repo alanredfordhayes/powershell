@@ -109,4 +109,4 @@ function Update_Title {
 }
 
 $local_items = Get-ChildItem -Path ".\"
-$local_items
+$local_items | Where-Object -Property Name -Match $name
