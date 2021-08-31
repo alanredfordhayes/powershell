@@ -1,4 +1,4 @@
-$name = "update_employeenumber"
+$name = "update_employeetitle"
 $date = Get-Date
 $log = "$name.txt"
 $home_dir = "~"
