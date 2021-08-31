@@ -108,5 +108,18 @@ function Update_Title {
     
 }
 
-$local_items = (Get-ChildItem -Path ".\" | Where-Object -Property Name -Match $name).Name -eq "$name.ps1"
-$local_items
+$local_filename_check = Get-ChildItem -Path ".\" | Where-Object -Property Name -Match $filename
+if ($null -ne $local_filename_check) {
+    $local_filename_check
+}
+
+$downloads_dir_check  = Get-ChildItem -Path "$home_dir\$downloads_dir" | Where-Object -Property Name -Match $filename
+if ($null -ne $downloads_dir_check) {
+    $downloads_dir_check
+}
+
+$documents_dir_check = Get-ChildItem -Path "$home_dir\$documents_dir" | Where-Object -Property Name -Match $filename
+if ($null -ne $documents_dir_check) {
+    $documents_dir_check
+}
+
