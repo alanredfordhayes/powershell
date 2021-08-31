@@ -10,8 +10,10 @@ function Import_CSV {
     param (
         [String]$name,
         [System.DateTime]$date,
-        [String]$log
+        [String]$log,
+        [String]$home_dir
     )
+
     if ( Test-Path -Path "$home_dir\AppData\Local\Temp\$name.csv") {
         try { Remove-Item -Path "$home_dir\AppData\Local\Temp\$name.csv" -ErrorAction Continue }
         catch { $Exception = $_.Exception ; "$date | $Exception " >> $log }
@@ -35,7 +37,6 @@ function Import_CSV {
 
     $csv = Import-Csv "$home_dir\AppData\Local\Temp\$name.csv"
     return $csv
-
 }
 
 function Update_Title {
@@ -125,3 +126,5 @@ function copy_ToTemp {
 }
 
 copy_ToTemp -filename $filename -home_dir $home_dir -downloads_dir $downloads_dir
+$csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir
+$csv
