@@ -48,6 +48,7 @@ function Update_Title {
         $csv_employee_name = $_.Employee_Name
         $aduser = $ADUsers | Where-Object -Property mail -EQ $csv_email_address
         if ($null -ne $aduser) {
+            "Info: Found USER: $csv_employee_name based on CSV comparison."
             if ($aduser.GetType().BaseType.Name -ne "Array") {
                 $bool_employee_title = $aduser.Title -ne $csv_title
                 if ($aduser.Title -ne $csv_title) { 
@@ -73,6 +74,7 @@ function Update_Title {
             "WARNING: Could not find USER: $csv_employee_name based on Email Address from CSV"
             $aduser = $ADUsers | Where-Object -Property targetAddress -EQ "SMTP:$csv_email_address"
             if ($null -ne $aduser) {
+                "Info: Found USER: $csv_employee_name based on Target Address"
                 $bool_employee_title = $aduser.Title -ne $csv_title
                 if ($aduser.Title -ne $csv_title) { 
                     Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
