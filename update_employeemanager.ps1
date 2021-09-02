@@ -87,7 +87,8 @@ function Update_Manager {
                     Write-Output "WARNING: Could not find MANAGER: $csv_manager for USER: $csv_employee_name based on estimated SamAccountName"
                 }
             }
-
+        } else {
+            Write-Output "WARNING: Could not a maanger for USER: $csv_employee_name based on Manager from CSV"
         }
     }
 
