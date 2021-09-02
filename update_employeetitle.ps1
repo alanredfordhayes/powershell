@@ -59,8 +59,10 @@ function Update_Title {
         } else {
             Write-Output "Could not find USER: $csv_employee_name based on Email Address from CSV"
             $csv_email_address_array = $csv_email_address.Split("@")
-            $aduser = Get-ADUser $csv_email_address_array[0]
-            $aduser
+            try { $aduser = Get-ADUser $csv_email_address_array[0] -ErrorAction Continue }
+            catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+            
+            $null -ne $aduser
         
         }
 
