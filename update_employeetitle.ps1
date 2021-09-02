@@ -59,7 +59,8 @@ function Update_Title {
         } else {
             Write-Output "Could not find USER: $csv_employee_name based on Email Address from CSV"
             $csv_email_address_array = $csv_email_address.Split("@")
-            $csv_email_address_array[0]
+            $aduser = Get-ADUser $csv_email_address_array[0]
+            $aduser
         
         }
 
