@@ -44,8 +44,7 @@ function Update_Manager {
         param (
             [Microsoft.ActiveDirectory.Management.ADAccount]$aduser,
             [String]$csv_manager,
-            [String]$csv_employee_name,
-            $bool
+            [String]$csv_employee_name
         )
 
         $dn = "CN=$csv_manager,OU=Users_OU,DC=dash,DC=corp"
@@ -53,6 +52,7 @@ function Update_Manager {
         catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
         
         if ($null -ne $manager) {
+            $bool = $aduser.Manager -ne $manager.DistinguishedName
             if ($aduser.Manager -ne $manager.DistinguishedName) { 
                 Write-Output "UPDATE: Since Employee Manager for USER: $csv_employee_name is $bool updating Manager..."
                 try { Set-ADUser -Identity $aduser.SamAccountName -Manager $manager.SamAccountName -ErrorAction Continue }
@@ -77,12 +77,12 @@ function Update_Manager {
             Write-Output "Info: Found USER: $csv_employee_name based on CSV comparison."
             if ($aduser.GetType().BaseType.Name -ne "Array") {
                 $bool_employee_manager = $aduser.Manager -ne $csv_manager
-                set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name -bool $bool_employee_manager
+                set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name 
             } else {
                 Write-Output "Warning: Found multiple entries for USER: $csv_employee_name"
                 $aduser = $aduser | Where-Object -Property Enabled -eq "True"
                 $bool_employee_manager = $aduser.Manager -ne $csv_manager
-                set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name -bool $bool_employee_manager
+                set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name 
             }
         } else {
             Write-Output "WARNING: Could not find USER: $csv_employee_name based on Email Address from CSV"
@@ -90,7 +90,7 @@ function Update_Manager {
             if ($null -ne $aduser) {
                 Write-Output "Info: Found USER: $csv_employee_name based on Target Address"
                 $bool_employee_manager = $aduser.Manager -ne $csv_manager
-                set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name -bool $bool_employee_manager
+                set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name 
             } else {
                 Write-Output "WARNING: Could not find USER: $csv_employee_name based on Target Addreess from CSV"
                 $csv_email_address_array = $csv_email_address.Split("@")
@@ -99,7 +99,7 @@ function Update_Manager {
                 $bool_aduser_query = $null -ne $aduser
                 if ($null -ne $aduser) {
                     Write-Output "Info: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query"
-                    set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name -bool $bool_aduser_Query
+                    set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name 
                 } else {
                     Write-Output "WARNING: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query executing additional search."
                     $dn = "CN=$csv_employee_name,OU=Users_OU,DC=dash,DC=corp"
@@ -108,7 +108,7 @@ function Update_Manager {
                     $bool_dn_query = $null -ne $aduser
                     if ($null -ne $aduser) {
                         Write-Output "Info: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query"
-                        set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name -bool $bool_dn_query
+                        set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name
                     } else {
                         Write-Output "WARNING: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query executing addtional search."
                     }
