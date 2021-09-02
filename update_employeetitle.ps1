@@ -40,8 +40,13 @@ function Update_Title {
         [System.Array]$csv
     )
 
+    $ADUsers = Get-ADUser -Filter * -Properties mail, Title
+
     $csv | ForEach-Object {
-        $_
+        $csv_email_address = $_.Email_Address
+        $aduser = $ADUsers | Where-Object -Property mail -EQ $csv_email_address
+        $aduser
+        
     }
     
 }
