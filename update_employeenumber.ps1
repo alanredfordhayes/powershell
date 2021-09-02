@@ -70,12 +70,12 @@ function Update_Number {
             Write-Output "Info: Found USER: $csv_employee_name based on CSV comparison."
             if ($aduser.GetType().BaseType.Name -ne "Array") {
                 $bool_employee_title = $aduser.Title -ne $csv_title
-                set_title -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_employee_title
+                set_number -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_employee_title
             } else {
                 Write-Output "Warning: Found multiple entries for USER: $csv_employee_name"
                 $aduser = $aduser | Where-Object -Property Enabled -eq "True"
                 $bool_employee_title = $aduser.Title -ne $csv_title
-                set_title -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_employee_title
+                set_number -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_employee_title
             }
         } else {
             Write-Output "WARNING: Could not find USER: $csv_employee_name based on Email Address from CSV"
@@ -83,7 +83,7 @@ function Update_Number {
             if ($null -ne $aduser) {
                 Write-Output "Info: Found USER: $csv_employee_name based on Target Address"
                 $bool_employee_title = $aduser.Title -ne $csv_title
-                set_title -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_employee_title
+                set_number -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_employee_title
             } else {
                 Write-Output "WARNING: Could not find USER: $csv_employee_name based on Target Addreess from CSV"
                 $csv_email_address_array = $csv_email_address.Split("@")
@@ -92,7 +92,7 @@ function Update_Number {
                 $bool_aduser_query = $null -ne $aduser
                 if ($null -ne $aduser) {
                     Write-Output "Info: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query"
-                    set_title -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_aduser_Query
+                    set_number -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_aduser_Query
                 } else {
                     Write-Output "WARNING: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query executing additional search."
                     $dn = "CN=$csv_employee_name,OU=Users_OU,DC=dash,DC=corp"
@@ -101,7 +101,7 @@ function Update_Number {
                     $bool_dn_query = $null -ne $aduser
                     if ($null -ne $aduser) {
                         Write-Output "Info: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query"
-                        set_title -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_dn_query
+                        set_number -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_dn_query
                     } else {
                         Write-Output "WARNING: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query executing addtional search."
                     }
