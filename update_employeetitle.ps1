@@ -59,7 +59,14 @@ function Update_Title {
                 }
             } else {
                 $aduser = $aduser | Where-Object -Property Enabled -eq "True"
-                $aduser
+                $bool_employee_title = $aduser.Title -ne $csv_title
+                if ($aduser.Title -ne $csv_title) { 
+                    Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
+                    try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
+                    catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                } else {
+                    Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
+                }
             }
         } else {
             Write-Output "WARNING: Could not find USER: $csv_employee_name based on Email Address from CSV"
