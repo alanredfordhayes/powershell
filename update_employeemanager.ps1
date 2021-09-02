@@ -52,7 +52,7 @@ function Update_Manager {
         catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
         
         if ($null -ne $manager) {
-            Write-Output "INFO: Found MANAGER: $csv_manager for USER: $csv_empolyee_name using Name to Distinguished Name conversion"
+            Write-Output "INFO: Found MANAGER: $csv_manager for USER: $csv_employee_name using Name to Distinguished Name conversion"
             $bool = $aduser.Manager -ne $manager.DistinguishedName
             if ($aduser.Manager -ne $manager.DistinguishedName) { 
                 Write-Output "UPDATE: Since Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
