@@ -55,12 +55,12 @@ function Update_Manager {
             Write-Output "INFO: Found MANAGER: $csv_manager for USER: $csv_employee_name using Name to Distinguished Name conversion"
             $bool = $aduser.Manager -ne $manager.DistinguishedName
             if ($aduser.Manager -ne $manager.DistinguishedName) { 
-                Write-Output "UPDATE: Since Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
+                Write-Output "UPDATE:  Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
                 try { Set-ADUser -Identity $aduser.SamAccountName -Manager $manager.SamAccountName -ErrorAction Continue }
                 catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                 Write-Output "Done"
             } else {
-                Write-Output "GOOD: Since Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
+                Write-Output "GOOD:  Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
             }
         } else {
             Write-Output "WARNING: Could not find MANAGER: $csv_manager for USER: $csv_employee_name based on Manager from CSV"
@@ -75,12 +75,12 @@ function Update_Manager {
                 Write-Output "INFO: Estimated SamAccountName for MANAGER: $csv_manager for USER: $csv_employee_name is $bool"
                 $bool = $aduser.Manager -ne $manager.DistinguishedName
                 if ($aduser.Manager -ne $manager.DistinguishedName) { 
-                    Write-Output "UPDATE: Since Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
+                    Write-Output "UPDATE:  Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
                     try { Set-ADUser -Identity $aduser.SamAccountName -Manager $manager.SamAccountName -ErrorAction Continue }
                     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                     Write-Output "Done"
                 } else {
-                    Write-Output "GOOD: Since Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
+                    Write-Output "GOOD:  Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
                 }
             } else {
                 Write-Output "WARNING: Could not find MANAGER: $csv_manager for USER: $csv_employee_name based on estimated SamAccountName"
@@ -120,19 +120,19 @@ function Update_Manager {
                 catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                 $bool_aduser_query = $null -ne $aduser
                 if ($null -ne $aduser) {
-                    Write-Output "Info: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query"
+                    Write-Output "Info: Estimate SamAccountName for USER: $csv_employee_name is $bool_aduser_Query"
                     set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name 
                 } else {
-                    Write-Output "WARNING: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query executing additional search."
+                    Write-Output "WARNING: Estimate SamAccountName for USER: $csv_employee_name is $bool_aduser_Query executing additional search."
                     $dn = "CN=$csv_employee_name,OU=Users_OU,DC=dash,DC=corp"
                     try { $aduser = Get-ADUser $dn -Properties mail, Manager -ErrorAction Continue }
                     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                     $bool_dn_query = $null -ne $aduser
                     if ($null -ne $aduser) {
-                        Write-Output "Info: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query"
+                        Write-Output "Info: Estimate Distinguished Name for USER: $csv_employee_name is $bool_dn_query"
                         set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name
                     } else {
-                        Write-Output "WARNING: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query executing addtional search."
+                        Write-Output "WARNING:Estimate Distinguished Name for USER: $csv_employee_name is $bool_dn_query executing addtional search."
                     }
                 }
             }
