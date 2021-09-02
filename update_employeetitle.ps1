@@ -86,6 +86,8 @@ function Update_Title {
                     } else {
                         Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
                     }
+                } else {
+                    "WARNING: Since estimated Distinguished Name for USER: $dn is $bool_dn_query executing addtional search."
                 }
             }
         }
