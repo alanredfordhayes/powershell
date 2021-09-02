@@ -100,7 +100,7 @@ function Update_Manager {
         $csv_employee_name = $_.Employee_Name
         $aduser = $ADUsers | Where-Object -Property mail -EQ $csv_email_address
         if ($null -ne $aduser) {
-            Write-Output "Info: Found USER: $csv_employee_name based on CSV comparison."
+            Write-Output "INFO: Found USER: $csv_employee_name based on CSV comparison."
             if ($aduser.GetType().BaseType.Name -ne "Array") {
                 $bool_employee_manager = $aduser.Manager -ne $csv_manager
                 set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name 
@@ -114,7 +114,7 @@ function Update_Manager {
             Write-Output "WARNING: Could not find USER: $csv_employee_name based on Email Address from CSV"
             $aduser = $ADUsers | Where-Object -Property targetAddress -EQ "SMTP:$csv_email_address"
             if ($null -ne $aduser) {
-                Write-Output "Info: Found USER: $csv_employee_name based on Target Address"
+                Write-Output "INFO: Found USER: $csv_employee_name based on Target Address"
                 $bool_employee_manager = $aduser.Manager -ne $csv_manager
                 set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name 
             } else {
@@ -124,7 +124,7 @@ function Update_Manager {
                 catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                 $bool_aduser_query = $null -ne $aduser
                 if ($null -ne $aduser) {
-                    Write-Output "Info: Estimate SamAccountName for USER: $csv_employee_name is $bool_aduser_Query"
+                    Write-Output "INFO: Estimate SamAccountName for USER: $csv_employee_name is $bool_aduser_Query"
                     set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name 
                 } else {
                     Write-Output "WARNING: Estimate SamAccountName for USER: $csv_employee_name is $bool_aduser_Query executing additional search."
@@ -133,7 +133,7 @@ function Update_Manager {
                     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                     $bool_dn_query = $null -ne $aduser
                     if ($null -ne $aduser) {
-                        Write-Output "Info: Estimate Distinguished Name for USER: $csv_employee_name is $bool_dn_query"
+                        Write-Output "INFO: Estimate Distinguished Name for USER: $csv_employee_name is $bool_dn_query"
                         set_manager -aduser $aduser -csv_manager $csv_manager -csv_employee_name $csv_employee_name
                     } else {
                         Write-Output "WARNING:Estimate Distinguished Name for USER: $csv_employee_name is $bool_dn_query executing addtional search."
