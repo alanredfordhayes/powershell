@@ -26,11 +26,6 @@ function Import_CSV {
         $first_line = Get-Content -Path "$home_dir\AppData\Local\Temp\$filename.csv" -First 1
         if ($line -eq $first_line){ 
             $line = $line.Replace(" ","_")
-            $lineArray = $line.Split(",")
-            $employee_Name = $lineArray[1]
-            $employee_NameArray = $Employee_Name.Split("_")
-            $employee_Name = $employee_NameArray[0].substring(1) + "_" + $employee_NameArray[1]
-            $line = $lineArray[0] + "," + $Employee_Name + "," + $lineArray[3] + "," + $lineArray[4] + "," + $lineArray[5]
         } 
 
         $line >> "$home_dir\AppData\Local\Temp\$name.csv"
