@@ -52,10 +52,10 @@ function Update_Manager {
         catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
         
         if ($null -ne $manager) {
-            Write-Output "INFO: Found Manager $csv_manager using Name to Distinguished Name conversion"
+            Write-Output "INFO: Found MANAGER: $csv_manager for USER: $csv_empolyee_name using Name to Distinguished Name conversion"
             $bool = $aduser.Manager -ne $manager.DistinguishedName
             if ($aduser.Manager -ne $manager.DistinguishedName) { 
-                Write-Output "UPDATE: Since Employee Manager for USER: $csv_employee_name is $bool updating Manager..."
+                Write-Output "UPDATE: Since Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
                 try { Set-ADUser -Identity $aduser.SamAccountName -Manager $manager.SamAccountName -ErrorAction Continue }
                 catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                 Write-Output "Done"
@@ -63,7 +63,7 @@ function Update_Manager {
                 Write-Output "GOOD: Since Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
             }
         } else {
-            Write-Output "WARNING: Could not find Manager: $csv_manager for USER: $csv_employee_name based on Manager from CSV"
+            Write-Output "WARNING: Could not find MANAGER: $csv_manager for USER: $csv_employee_name based on Manager from CSV"
         }
     }
 
