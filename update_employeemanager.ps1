@@ -55,12 +55,12 @@ function Update_Manager {
             Write-Output "INFO: Found MANAGER: $csv_manager for USER: $csv_employee_name using Name to Distinguished Name conversion"
             $bool = $aduser.Manager -ne $manager.DistinguishedName
             if ($aduser.Manager -ne $manager.DistinguishedName) { 
-                Write-Output "UPDATE:  Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
+                Write-Output "UPDATE: Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
                 try { Set-ADUser -Identity $aduser.SamAccountName -Manager $manager.SamAccountName -ErrorAction Continue }
                 catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                 Write-Output "Done"
             } else {
-                Write-Output "GOOD:  Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
+                Write-Output "GOOD: Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
             }
         } else {
             Write-Output "WARNING: Could not find MANAGER: $csv_manager for USER: $csv_employee_name based on Manager from CSV"
@@ -75,12 +75,12 @@ function Update_Manager {
                 Write-Output "INFO: Estimated SamAccountName for MANAGER: $csv_manager for USER: $csv_employee_name is $bool"
                 $bool = $aduser.Manager -ne $manager.DistinguishedName
                 if ($aduser.Manager -ne $manager.DistinguishedName) { 
-                    Write-Output "UPDATE:  Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
+                    Write-Output "UPDATE: Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
                     try { Set-ADUser -Identity $aduser.SamAccountName -Manager $manager.SamAccountName -ErrorAction Continue }
                     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                     Write-Output "Done"
                 } else {
-                    Write-Output "GOOD:  Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
+                    Write-Output "GOOD: Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
                 }
             } else {
                 Write-Output "WARNING: Could not find MANAGER: $csv_manager for USER: $csv_employee_name based on estimated SamAccountName"
