@@ -47,32 +47,13 @@ function Update_Manager {
             [String]$csv_employee_name
         )
 
-        $dn = "CN=$csv_manager,OU=Users_OU,DC=dash,DC=corp"
-        try { $manager = Get-ADUser $dn -ErrorAction Continue }
-        catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
-        
-        if ($null -ne $manager) {
-            Write-Output "INFO: Found MANAGER: $csv_manager for USER: $csv_employee_name using Name to Distinguished Name conversion"
-            $bool = $aduser.Manager -ne $manager.DistinguishedName
-            if ($aduser.Manager -ne $manager.DistinguishedName) { 
-                Write-Output "UPDATE: Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
-                try { Set-ADUser -Identity $aduser.SamAccountName -Manager $manager.SamAccountName -ErrorAction Continue }
-                catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
-                Write-Output "Done"
-            } else {
-                Write-Output "GOOD: Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
-            }
-        } else {
-            Write-Output "WARNING: Could not find MANAGER: $csv_manager for USER: $csv_employee_name based on Manager from CSV"
-            $csv_manager_array = $csv_manager.Split(" ")
-            $firstinitial = $csv_manager_array[0].Substring(0,1).ToLower()
-            $lastname = $csv_manager_array[1].ToLower()
-            $csv_manager_samaccountname = $firstinitial + $lastname
-            try { $manager = Get-ADUser $csv_manager_samaccountname -ErrorAction Continue }
+        if ($null -ne $csv_manager) {
+            $dn = "CN=$csv_manager,OU=Users_OU,DC=dash,DC=corp"
+            try { $manager = Get-ADUser $dn -ErrorAction Continue }
             catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
-            $bool = $null -eq $manager
-            if ($null -ne $manager){
-                Write-Output "INFO: Estimated SamAccountName for MANAGER: $csv_manager for USER: $csv_employee_name is $bool"
+            
+            if ($null -ne $manager) {
+                Write-Output "INFO: Found MANAGER: $csv_manager for USER: $csv_employee_name using Name to Distinguished Name conversion"
                 $bool = $aduser.Manager -ne $manager.DistinguishedName
                 if ($aduser.Manager -ne $manager.DistinguishedName) { 
                     Write-Output "UPDATE: Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
@@ -83,8 +64,30 @@ function Update_Manager {
                     Write-Output "GOOD: Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
                 }
             } else {
-                Write-Output "WARNING: Could not find MANAGER: $csv_manager for USER: $csv_employee_name based on estimated SamAccountName"
+                Write-Output "WARNING: Could not find MANAGER: $csv_manager for USER: $csv_employee_name based on Manager from CSV"
+                $csv_manager_array = $csv_manager.Split(" ")
+                $firstinitial = $csv_manager_array[0].Substring(0,1).ToLower()
+                $lastname = $csv_manager_array[1].ToLower()
+                $csv_manager_samaccountname = $firstinitial + $lastname
+                try { $manager = Get-ADUser $csv_manager_samaccountname -ErrorAction Continue }
+                catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                $bool = $null -eq $manager
+                if ($null -ne $manager){
+                    Write-Output "INFO: Estimated SamAccountName for MANAGER: $csv_manager for USER: $csv_employee_name is $bool"
+                    $bool = $aduser.Manager -ne $manager.DistinguishedName
+                    if ($aduser.Manager -ne $manager.DistinguishedName) { 
+                        Write-Output "UPDATE: Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
+                        try { Set-ADUser -Identity $aduser.SamAccountName -Manager $manager.SamAccountName -ErrorAction Continue }
+                        catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                        Write-Output "Done"
+                    } else {
+                        Write-Output "GOOD: Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
+                    }
+                } else {
+                    Write-Output "WARNING: Could not find MANAGER: $csv_manager for USER: $csv_employee_name based on estimated SamAccountName"
+                }
             }
+
         }
     }
 
