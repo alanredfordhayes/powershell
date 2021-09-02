@@ -40,6 +40,25 @@ function Update_Title {
         [System.Array]$csv
     )
 
+    function set_title {
+        param (
+            [Microsoft.ActiveDirectory.Management.ADAccount]$aduser,
+            [String]$csv_title,
+            [String]$csv_employee_name,
+            $bool
+        )
+        
+        if ($aduser.Title -ne $csv_title) { 
+            Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool updating TITLE..."
+            try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
+            catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+            Write-Output "Done"
+        } else {
+            Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool NOT updating TITLE"
+        }
+
+    }
+
     $ADUsers = Get-ADUser -Filter * -Properties mail, Title, targetAddress
 
     $csv | ForEach-Object {
@@ -51,14 +70,7 @@ function Update_Title {
             Write-Output "Info: Found USER: $csv_employee_name based on CSV comparison."
             if ($aduser.GetType().BaseType.Name -ne "Array") {
                 $bool_employee_title = $aduser.Title -ne $csv_title
-                if ($aduser.Title -ne $csv_title) { 
-                    Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
-                    try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
-                    catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
-                    Write-Output "Done"
-                } else {
-                    Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
-                }
+                set_title -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_employee_title
             } else {
                 Write-Output "Warning: Found multiple entries for USER: $csv_employee_name"
                 $aduser = $aduser | Where-Object -Property Enabled -eq "True"
