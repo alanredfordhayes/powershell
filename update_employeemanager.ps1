@@ -62,7 +62,7 @@ function Update_Manager {
                 Write-Output "GOOD: Since Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
             }
         } else {
-            Write-Output "WARNING: Could not find Manager: $csv_manager based on Manager from CSV"
+            Write-Output "WARNING: Could not find Manager: $csv_manager for USER: $csv_employee_name based on Manager from CSV"
         }
     }
 
