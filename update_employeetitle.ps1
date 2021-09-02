@@ -105,7 +105,7 @@ function Update_Title {
                     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                     $bool_dn_query = $null -ne $aduser
                     if ($null -ne $aduser) {
-                        "Info: Since estimated Distinguished Name for USER: $csv_employee_nameis $bool_dn_query"
+                        "Info: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query"
                         if ($aduser.Title -ne $csv_title) { 
                             Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
                             try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
