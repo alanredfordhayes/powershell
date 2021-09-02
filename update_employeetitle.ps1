@@ -73,6 +73,20 @@ function Update_Title {
                 }
             } else {
                 "WARNING: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query executing additional search."
+                $dn = "CN=$csv_employee_name,OU=Users_OU,DC=dash,DC=corp"
+                try { $aduser = Get-ADUser $dn -Properties mail, Title -ErrorAction Continue }
+                catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                $bool_dn_query = $null -ne $aduser
+                if ($null -ne $aduser) {
+                    "Info: Since estimated Distinguished Name for USER: $dn is $bool_dn_query"
+                    if ($aduser.Title -ne $csv_title) { 
+                        Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
+                        try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
+                        catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                    } else {
+                        Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
+                    }
+
             }
         }
 
