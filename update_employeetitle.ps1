@@ -46,10 +46,15 @@ function Update_Title {
         $csv_email_address = $_.Email_Address
         $csv_title = $_.Job_Title
         $aduser = $ADUsers | Where-Object -Property mail -EQ $csv_email_address
-        if ($aduser.Title -ne $csv_title) {
-            try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
-            catch { $Exception = $_.Exception ; "$date | $Exception " >> $log }
+        if ($null -ne $aduser) {
+            if ($aduser.Title -ne $csv_title) {
+                try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
+                catch { $Exception = $_.Exception ; "$date | $Exception " >> $log }
+            }
+        } else {
+            $_
         }
+
     }
     
 }
