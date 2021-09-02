@@ -49,8 +49,12 @@ function Update_Manager {
         )
 
         $dn = "CN=$csv_manager,OU=Users_OU,DC=dash,DC=corp"
-        $manager = Get-ADUser $dn
-        $manager
+        try { $manager = Get-ADUser $dn -ErrorAction Continue }
+        catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+        
+        if ($null -ne $manager) {
+            $manager
+        }
         
         # if ($aduser.Manager -ne $csv_manager) { 
         #     Write-Output "UPDATE: Since Employee Manager for USER: $csv_employee_name is $bool updating Manager..."
