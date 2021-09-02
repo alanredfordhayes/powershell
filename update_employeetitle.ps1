@@ -58,6 +58,7 @@ function Update_Title {
                     Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
                 }
             } else {
+                "Warning: Found multiple entries for USER: $csv_employee_name"
                 $aduser = $aduser | Where-Object -Property Enabled -eq "True"
                 $bool_employee_title = $aduser.Title -ne $csv_title
                 if ($aduser.Title -ne $csv_title) { 
