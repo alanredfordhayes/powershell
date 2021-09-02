@@ -68,8 +68,9 @@ function Update_Manager {
             $firstinitial = $csv_manager_array[0].Substring(0,1).ToLower()
             $lastname = $csv_manager_array[1].ToLower()
             $csv_manager_samaccountname = $firstinitial + $lastname
-            $csv_manager_samaccountname
-
+            try { $manager = Get-ADUser $csv_manager_samaccountname -ErrorAction Continue }
+            catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+            $manager
         }
     }
 
