@@ -86,12 +86,9 @@ function Update_Title {
                     } else {
                         Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
                     }
-
             }
         }
-
     }
-    
 }
 
 function copy_ToTemp {
