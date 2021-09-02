@@ -44,8 +44,9 @@ function Update_Title {
 
     $csv | ForEach-Object {
         $csv_email_address = $_.Email_Address
+        $csv_title = $_.Job_Title
         $aduser = $ADUsers | Where-Object -Property mail -EQ $csv_email_address
-        $aduser
+        $aduser.Title -eq $csv_title
         
     }
     
