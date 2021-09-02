@@ -40,44 +40,8 @@ function Update_Title {
         [System.Array]$csv
     )
 
-    $users_list = Get-AdUser -Filter * -Properties mail, employeenumber, proxyAddresses
-
     $csv | ForEach-Object {
-        $employeenumber = $_.Employee_Number
-        $employeename = $_.Employee_Name 
-        $email_address = $_.Email_Address
-        $user = $users_list | Where-Object -Property mail -eq $email_address
-        if ($null -eq $user) {
-            $email_address_array = $email_address.Split("@")
-            $upn = $email_address_array[0] + "@dash.corp"
-            $user = $users_list | Where-Object -Property UserPrincipalName -eq $upn
-        }
-
-        if ($null -eq $user) {
-            $users_list | ForEach-Object {
-                $proxyAddresses = $_.proxyAddresses
-                $smtp = "smtp:$email_address"
-                if ($proxyAddresses.Contains($smtp)) {
-                    $user = $_
-                }
-            }
-        } 
-
-        if (($null -ne $user) -and ($user.gettype().basetype.name -eq "Array")) {
-            $user = $user | Where-Object -Property Enabled -eq "True"
-        }
-
-        if ($user.employeenumber -ne $employeenumber) {
-            if ($null -ne $user) {
-                Write-Output "Updating User: $employeename"
-                try { Set-AdUser $user.DistinguishedName -EmployeeNumber $employeenumber -ErrorAction Continue }
-                catch { Write-Output "Error on User: $employeename" ; $Exception = $_.Exception ; "$date | $employeename | $Exception " >> $log }
-            } else {
-                Write-Output "Error finding: $employeename" ; "$date | $employeename | User NOT Found. " >> $log 
-            }
-        } else {
-            Write-Output "EmployeeNumber for User: $employeename is Good."
-        }
+        $_
     }
     
 }
@@ -123,4 +87,4 @@ function copy_ToTemp {
 
 copy_ToTemp -filename $filename -home_dir $home_dir -downloads_dir $downloads_dir
 $csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -filename $filename
-$csv
+Update_Title -csv $csv
