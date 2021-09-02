@@ -48,38 +48,41 @@ function Update_Title {
         $csv_employee_name = $_.Employee_Name
         $aduser = $ADUsers | Where-Object -Property mail -EQ $csv_email_address
         if ($null -ne $aduser) {
-            "Info: Found USER: $csv_employee_name based on CSV comparison."
+            Write-Output "Info: Found USER: $csv_employee_name based on CSV comparison."
             if ($aduser.GetType().BaseType.Name -ne "Array") {
                 $bool_employee_title = $aduser.Title -ne $csv_title
                 if ($aduser.Title -ne $csv_title) { 
                     Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
                     try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
                     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                    Write-Output "Done"
                 } else {
                     Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
                 }
             } else {
-                "Warning: Found multiple entries for USER: $csv_employee_name"
+                Write-Output "Warning: Found multiple entries for USER: $csv_employee_name"
                 $aduser = $aduser | Where-Object -Property Enabled -eq "True"
                 $bool_employee_title = $aduser.Title -ne $csv_title
                 if ($aduser.Title -ne $csv_title) { 
                     Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
                     try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
                     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                    Write-Output "Done"
                 } else {
                     Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
                 }
             }
         } else {
-            "WARNING: Could not find USER: $csv_employee_name based on Email Address from CSV"
+            Write-Output "WARNING: Could not find USER: $csv_employee_name based on Email Address from CSV"
             $aduser = $ADUsers | Where-Object -Property targetAddress -EQ "SMTP:$csv_email_address"
             if ($null -ne $aduser) {
-                "Info: Found USER: $csv_employee_name based on Target Address"
+                Write-Output "Info: Found USER: $csv_employee_name based on Target Address"
                 $bool_employee_title = $aduser.Title -ne $csv_title
                 if ($aduser.Title -ne $csv_title) { 
                     Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
                     try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
                     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                    Write-Output "Done"
                 } else {
                     Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
                 }
@@ -90,31 +93,33 @@ function Update_Title {
                 catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                 $bool_aduser_query = $null -ne $aduser
                 if ($null -ne $aduser) {
-                    "Info: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query"
+                    Write-Output "Info: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query"
                     if ($aduser.Title -ne $csv_title) { 
                         Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
                         try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
                         catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                        Write-Output "Done"
                     } else {
                         Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
                     }
                 } else {
-                    "WARNING: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query executing additional search."
+                    Write-Output "WARNING: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query executing additional search."
                     $dn = "CN=$csv_employee_name,OU=Users_OU,DC=dash,DC=corp"
                     try { $aduser = Get-ADUser $dn -Properties mail, Title -ErrorAction Continue }
                     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                     $bool_dn_query = $null -ne $aduser
                     if ($null -ne $aduser) {
-                        "Info: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query"
+                        Write-Output "Info: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query"
                         if ($aduser.Title -ne $csv_title) { 
                             Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
                             try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
                             catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                            Write-Output "Done"
                         } else {
                             Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
                         }
                     } else {
-                        "WARNING: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query executing addtional search."
+                        Write-Output "WARNING: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query executing addtional search."
                     }
                 }
             }
