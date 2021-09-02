@@ -35,12 +35,12 @@ function Import_CSV {
     return $csv
 }
 
-function Update_Title {
+function Update_Number {
     param (
         [System.Array]$csv
     )
 
-    function set_title {
+    function set_number {
         param (
             [Microsoft.ActiveDirectory.Management.ADAccount]$aduser,
             [String]$csv_title,
@@ -152,4 +152,4 @@ function copy_ToTemp {
 
 copy_ToTemp -filename $filename -home_dir $home_dir -downloads_dir $downloads_dir
 $csv = Import_CSV -name $name -date $date -log $log -home_dir $home_dir -filename $filename
-Update_Title -csv $csv
+Update_Number -csv $csv
