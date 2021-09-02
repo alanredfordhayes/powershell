@@ -72,7 +72,8 @@ function Update_Manager {
             catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
             $bool = $null -eq $manager
             if ($null -ne $manager){
-                Write-Output "INFO: Since estimated SamAccountName for MANAGER: $csv_manager for USER: $csv_employee_name is $bool"
+                Write-Output "INFO: Estimated SamAccountName for MANAGER: $csv_manager for USER: $csv_employee_name is $bool"
+                $bool = $aduser.Manager -ne $manager.DistinguishedName
                 if ($aduser.Manager -ne $manager.DistinguishedName) { 
                     Write-Output "UPDATE: Since Employee MANAGER for USER: $csv_employee_name is $bool updating MANAGER..."
                     try { Set-ADUser -Identity $aduser.SamAccountName -Manager $manager.SamAccountName -ErrorAction Continue }
