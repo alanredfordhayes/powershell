@@ -43,65 +43,65 @@ function Update_Number {
     function set_number {
         param (
             [Microsoft.ActiveDirectory.Management.ADAccount]$aduser,
-            [String]$csv_title,
+            [String]$csv_employeenumber,
             [String]$csv_employee_name,
             $bool
         )
         
-        if ($aduser.Title -ne $csv_title) { 
-            Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool updating TITLE..."
-            try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
+        if ($aduser.EmployeeNumber -ne $csv_employeenumber) { 
+            Write-Output "UPDATE: Since Employee Number for USER: $csv_employee_name is $bool updating Number..."
+            try { Set-ADUser -Identity $aduser.SamAccountName -EmployeeNumber $csv_employeenumber -ErrorAction Continue }
             catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
             Write-Output "Done"
         } else {
-            Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool NOT updating TITLE"
+            Write-Output "GOOD: Since Employee Number for USER: $csv_employee_name is $bool NOT updating Number"
         }
 
     }
 
-    $ADUsers = Get-ADUser -Filter * -Properties mail, Title, targetAddress
+    $ADUsers = Get-ADUser -Filter * -Properties mail, EmployeeNumber, targetAddress
 
     $csv | ForEach-Object {
         $csv_email_address = $_.Email_Address
-        $csv_title = $_.Job_Title
+        $csv_employeenumber = $_.Employee_Number
         $csv_employee_name = $_.Employee_Name
         $aduser = $ADUsers | Where-Object -Property mail -EQ $csv_email_address
         if ($null -ne $aduser) {
             Write-Output "Info: Found USER: $csv_employee_name based on CSV comparison."
             if ($aduser.GetType().BaseType.Name -ne "Array") {
-                $bool_employee_title = $aduser.Title -ne $csv_title
-                set_number -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_employee_title
+                $bool_employee_number = $aduser.EmployeeNumber -ne $csv_employeenumber
+                set_number -aduser $aduser -csv_employeenumber $csv_employeenumber -csv_employee_name $csv_employee_name -bool $bool_employee_number
             } else {
                 Write-Output "Warning: Found multiple entries for USER: $csv_employee_name"
                 $aduser = $aduser | Where-Object -Property Enabled -eq "True"
-                $bool_employee_title = $aduser.Title -ne $csv_title
-                set_number -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_employee_title
+                $bool_employee_number = $aduser.EmployeeNumber -ne $csv_employeenumber
+                set_number -aduser $aduser -csv_employeenumber $csv_employeenumber -csv_employee_name $csv_employee_name -bool $bool_employee_number
             }
         } else {
             Write-Output "WARNING: Could not find USER: $csv_employee_name based on Email Address from CSV"
             $aduser = $ADUsers | Where-Object -Property targetAddress -EQ "SMTP:$csv_email_address"
             if ($null -ne $aduser) {
                 Write-Output "Info: Found USER: $csv_employee_name based on Target Address"
-                $bool_employee_title = $aduser.Title -ne $csv_title
-                set_number -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_employee_title
+                $bool_employee_number = $aduser.EmployeeNumber -ne $csv_employeenumber
+                set_number -aduser $aduser -csv_employeenumber $csv_employeenumber -csv_employee_name $csv_employee_name -bool $bool_employee_number
             } else {
                 Write-Output "WARNING: Could not find USER: $csv_employee_name based on Target Addreess from CSV"
                 $csv_email_address_array = $csv_email_address.Split("@")
-                try { $aduser = Get-ADUser $csv_email_address_array[0] -Properties mail, Title -ErrorAction Continue }
+                try { $aduser = Get-ADUser $csv_email_address_array[0] -Properties mail, EmployeeNumber -ErrorAction Continue }
                 catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                 $bool_aduser_query = $null -ne $aduser
                 if ($null -ne $aduser) {
                     Write-Output "Info: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query"
-                    set_number -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_aduser_Query
+                    set_number -aduser $aduser -csv_employeenumber $csv_employeenumber -csv_employee_name $csv_employee_name -bool $bool_aduser_Query
                 } else {
                     Write-Output "WARNING: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query executing additional search."
                     $dn = "CN=$csv_employee_name,OU=Users_OU,DC=dash,DC=corp"
-                    try { $aduser = Get-ADUser $dn -Properties mail, Title -ErrorAction Continue }
+                    try { $aduser = Get-ADUser $dn -Properties mail, EmployeeNumber -ErrorAction Continue }
                     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                     $bool_dn_query = $null -ne $aduser
                     if ($null -ne $aduser) {
                         Write-Output "Info: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query"
-                        set_number -aduser $aduser -csv_title $csv_title -csv_employee_name $csv_employee_name -bool $bool_dn_query
+                        set_number -aduser $aduser -csv_employeenumber $csv_employeenumber -csv_employee_name $csv_employee_name -bool $bool_dn_query
                     } else {
                         Write-Output "WARNING: Since estimated Distinguished Name for USER: $csv_employee_name is $bool_dn_query executing addtional search."
                     }
