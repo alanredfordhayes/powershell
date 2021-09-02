@@ -47,7 +47,7 @@ function Update_Manager {
             [String]$csv_employee_name
         )
 
-        if ($null -ne $csv_manager) {
+        if (2 -lt $csv_manager.length) {
             $dn = "CN=$csv_manager,OU=Users_OU,DC=dash,DC=corp"
             try { $manager = Get-ADUser $dn -ErrorAction Continue }
             catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
