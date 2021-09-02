@@ -46,7 +46,7 @@ function Update_Title {
         $csv_email_address = $_.Email_Address
         $csv_title = $_.Job_Title
         $csv_employee_name = $_.Employee_Name
-        $aduser = $ADUsers | Where-Object -Property mail,Title -EQ $csv_email_address
+        $aduser = $ADUsers | Where-Object -Property mail -EQ $csv_email_address
         if ($null -ne $aduser) {
             $bool_employee_title = $aduser.Title -ne $csv_title
             if ($aduser.Title -ne $csv_title) { 
@@ -59,7 +59,7 @@ function Update_Title {
         } else {
             Write-Output "WARNING: Could not find USER: $csv_employee_name based on Email Address from CSV"
             $csv_email_address_array = $csv_email_address.Split("@")
-            try { $aduser = Get-ADUser $csv_email_address_array[0] -Property mail,Title -ErrorAction Continue }
+            try { $aduser = Get-ADUser $csv_email_address_array[0] -Properties mail, Title -ErrorAction Continue }
             catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
             $bool_aduser_query = $null -ne $aduser
             if ($null -ne $aduser) {
