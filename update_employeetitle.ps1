@@ -65,8 +65,12 @@ function Update_Title {
             if ($null -ne $aduser) {
                 "UPDATE: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query attempting to update..."
                 Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
-                try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
-                catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                if ($aduser.Title -ne $csv_title) { 
+                    try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
+                    catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                } else {
+                    Write-Output "GOOD: Since Employee Title for USER: $csv_employee_name is $bool_employee_title NOT updating TITLE"
+                }
             } else {
                 "WARNING: Since estimated SamAccountName for USER: $csv_employee_name is $bool_aduser_Query executing additional search."
             }
