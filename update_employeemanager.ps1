@@ -64,6 +64,12 @@ function Update_Manager {
             }
         } else {
             Write-Output "WARNING: Could not find MANAGER: $csv_manager for USER: $csv_employee_name based on Manager from CSV"
+            $csv_manager_array = $csv_manager.Split(" ")
+            $firstinitial = $csv_manager_array[0].Substring(0,1).ToLower()
+            $lastname = $csv_manager_array.ToLower()
+            $csv_manager_samaccountname = $firstinitial + $lastname
+            $csv_manager_samaccountname
+
         }
     }
 
