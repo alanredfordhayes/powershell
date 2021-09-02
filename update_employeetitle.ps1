@@ -52,7 +52,6 @@ function Update_Title {
                 $bool_employee_title = $aduser.Title -ne $csv_title
                 if ($aduser.Title -ne $csv_title) { 
                     Write-Output "UPDATE: Since Employee Title for USER: $csv_employee_name is $bool_employee_title updating TITLE..."
-                    $aduser.GetType().
                     try { Set-ADUser -Identity $aduser.SamAccountName -Title $csv_title -ErrorAction Continue }
                     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
                 } else {
