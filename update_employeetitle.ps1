@@ -70,7 +70,8 @@ function Update_Title {
                 }
             }
         } else {
-            $aduser = $ADUsers | Where-Object -Property targetAddress -EQ $csv_email_address
+            "WARNING: Could not find USER: $csv_employee_name based on Email Address from CSV"
+            $aduser = $ADUsers | Where-Object -Property targetAddress -EQ "SMTP:$csv_email_address"
             if ($null -ne $aduser) {
                 $bool_employee_title = $aduser.Title -ne $csv_title
                 if ($aduser.Title -ne $csv_title) { 
