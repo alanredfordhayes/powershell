@@ -53,18 +53,17 @@ function Update_Manager {
         catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
         
         if ($null -ne $manager) {
-            $manager
+            if ($aduser.Manager -ne $manager.DistinguishedName) { 
+                Write-Output "UPDATE: Since Employee Manager for USER: $csv_employee_name is $bool updating Manager..."
+                try { Set-ADUser -Identity $aduser.SamAccountName -Manager $manager.SamAccountName -ErrorAction Continue }
+                catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
+                Write-Output "Done"
+            } else {
+                Write-Output "GOOD: Since Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
+            }
+        } else {
+            Write-Output "WARNING: Could not find Manager: $csv_manager based on Manager from CSV"
         }
-        
-        # if ($aduser.Manager -ne $csv_manager) { 
-        #     Write-Output "UPDATE: Since Employee Manager for USER: $csv_employee_name is $bool updating Manager..."
-        #     try { Set-ADUser -Identity $aduser.SamAccountName -Manager $csv_manager -ErrorAction Continue }
-        #     catch { $Exception = $_.Exception ; "$date | $Exception " >> $log; Write-Output "ERROR: Check Log" }
-        #     Write-Output "Done"
-        # } else {
-        #     Write-Output "GOOD: Since Employee Manager for USER: $csv_employee_name is $bool NOT updating Manager"
-        # }
-
     }
 
     $ADUsers = Get-ADUser -Filter * -Properties mail, Manager, targetAddress
