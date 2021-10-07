@@ -1,0 +1,17 @@
+09/27/2021 15:00:08 | azContext | NotSpecified on Invoke-WebRequest caused by InvalidOperationException. | This operation is not supported for a relative URI.
+09/27/2021 15:40:33 | azContext | InvalidArgument on Invoke-WebRequest caused by ValidationMetadataException. | The cmdlet cannot run because the following parameter is not specified: Credential. The supplied Authentication type requires a Credential. Specify Credential, then retry.
+09/27/2021 15:44:19 | azContext | NotSpecified on Invoke-WebRequest caused by InvalidOperationException. | This operation is not supported for a relative URI.
+09/27/2021 15:48:02 | azContext | NotSpecified on Invoke-WebRequest caused by InvalidOperationException. | This operation is not supported for a relative URI.
+09/27/2021 15:50:57 | azContext | NotSpecified on Invoke-WebRequest caused by InvalidOperationException. | This operation is not supported for a relative URI.
+09/27/2021 15:51:51 | azContext | NotSpecified on Invoke-WebRequest caused by InvalidOperationException. | This operation is not supported for a relative URI.
+09/27/2021 15:52:16 | azContext | InvalidOperation on Invoke-WebRequest caused by HttpResponseException. | Response status code does not indicate success: 400 (Bad Request).
+09/27/2021 15:53:02 | azContext | InvalidOperation on Invoke-WebRequest caused by HttpResponseException. | Response status code does not indicate success: 400 (Bad Request).
+09/28/2021 08:49:03 | azContext | InvalidOperation on Invoke-WebRequest caused by HttpResponseException. | Response status code does not indicate success: 401 (Unauthorized).
+09/28/2021 09:27:24 | azContext | InvalidOperation on Invoke-WebRequest caused by HttpResponseException. | Response status code does not indicate success: 500 (Internal Server Error).
+09/28/2021 09:27:58 | azContext | InvalidOperation on Invoke-WebRequest caused by HttpResponseException. | Response status code does not indicate success: 500 (Internal Server Error).
+09/28/2021 09:29:51 | azContext | InvalidOperation on Invoke-WebRequest caused by HttpResponseException. | Response status code does not indicate success: 401 (Unauthorized).
+09/28/2021 09:30:25 | azContext | InvalidOperation on Invoke-WebRequest caused by HttpResponseException. | Response status code does not indicate success: 500 (Internal Server Error).
+09/28/2021 09:30:53 | azContext | InvalidOperation on Invoke-WebRequest caused by HttpResponseException. | Response status code does not indicate success: 500 (Internal Server Error).
+09/28/2021 09:37:23 | azContext | InvalidOperation on Invoke-WebRequest caused by HttpResponseException. | Response status code does not indicate success: 500 (Internal Server Error).
+09/28/2021 13:20:55 | azContext | InvalidOperation on Invoke-WebRequest caused by HttpResponseException. | Response status code does not indicate success: 400 (Bad Request).
+09/28/2021 13:21:09 | azContext | InvalidOperation on Invoke-WebRequest caused by HttpResponseException. | Response status code does not indicate success: 400 (Bad Request).
