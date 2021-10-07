@@ -17,19 +17,19 @@ function errorHandling {
 try { $adSecurityGroup = Read-Host -Prompt "AD Security Grouup" -ErrorAction Stop } catch { errorHandling -handledError $Error[0] -scriptLog $scriptLog -name "Read-Host | AD Security Grouup " }
 try { $adGroup = Get-AdGroup -Identity $adSecurityGroup -ErrorAction Stop } catch { errorHandling -handledError $Error[0] -scriptLog $scriptLog -name "Get-AdGroup" } 
 try { $adGroupMembers = Get-ADGroupMember -Identity $adGroup -ErrorAction Stop } catch { errorHandling -handledError $Error[0] -scriptLog $scriptLog -name "Get-AdGroupMember" }
-$adGroupMembers | ForEach-Object {
-    $distinguishedName   = $_.distinguishedName
-    $name                = $_.name
-    $objectClass         = $_.objectClass
-    $objectGUID          = $_.objectGUID
-    $SamAccountName      = $_.SamAccountName
-    $SID                 = $_.SID
+try { $Office = Read-Host -Prompt "Office" -ErrorAction Stop } catch { errorHandling -handledError $Error[0] -scriptLog $scriptLog -name "Read-Host | AD Security Grouup " }
+try { $PostalCode = Read-Host -Prompt "Postal Code" -ErrorAction Stop } catch { errorHandling -handledError $Error[0] -scriptLog $scriptLog -name "Read-Host | AD Security Grouup " }
 
-    $Office                      = "28 Liberty St, Floor 7, New York, NY 10005"
-    $physicalDeliveryOfficeName  = "28 Liberty St, Floor 7, New York, NY 10005"
-    $PostalCode                  = "10005"
-    $StreetAddress               = "28 Liberty St, Floor 7, New York, NY 10005"
+$adGroupMembers | ForEach-Object {
+    # $distinguishedName   = $_.distinguishedName
+    # $name                = $_.name
+    # $objectClass         = $_.objectClass
+    # $objectGUID          = $_.objectGUID
+    $SamAccountName      = $_.SamAccountName
+    # $SID                 = $_.SID
 
     try { $adUser = Get-ADUser -Identity $SamAccountName -Properties Office, physicalDeliveryOfficeName, PostalCode, StreetAddress -ErrorAction Stop } catch { errorHandling -handledError $Error[0] -scriptLog $scriptLog -name "Get-AdGroupUser" }
-    $adUser
+    if ($adUser.Office -ne $Office) { try { $adUser | Set-ADUser -Office $Office -ErrorAction Stop } catch { errorHandling -handledError $Error[0] -scriptLog $scriptLog -name "Get-SetADUser | Office" } }
+    if ($adUser.PostalCode -ne $PostalCode) { try { $adUser | Set-ADUser -PostalCode $PostalCode -ErrorAction Stop } catch { errorHandling -handledError $Error[0] -scriptLog $scriptLog -name "Get-SetADUser | Postal Code" } }
+    if ($adUser.StreetAddress -ne $Office) { try { $adUser | Set-ADUser -StreetAddress $Office -ErrorAction Stop } catch { errorHandling -handledError $Error[0] -scriptLog $scriptLog -name "Get-SetADUser | StreetAddress" } }
 }
