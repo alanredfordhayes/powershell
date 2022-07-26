@@ -1,0 +1,59 @@
+{
+  "config.version" : "2.0",
+  "config.project.from.csv" : "false",
+  "config.encoding" : "UTF-8",
+  "config.file.id" : "7a369381-40a5-420e-ba0d-242e084d6f33",
+  "config.email.suffix" : "@",
+  "config.file.name" : "import1 copy.csv",
+  "config.field.mappings" : {
+    "issue_type" : {
+      "jira.field" : "issuetype",
+      "userChanged" : "true",
+      "manualMapping" : "false"
+    },
+    "jira_key" : {
+      "jira.field" : "issuekey",
+      "userChanged" : "true",
+      "manualMapping" : "true"
+    },
+    "id" : {
+      "jira.field" : "issue-id",
+      "userChanged" : "true",
+      "manualMapping" : "true"
+    },
+    "summary " : {
+      "jira.field" : "summary",
+      "userChanged" : "true",
+      "manualMapping" : "false"
+    },
+    "parent_id" : {
+      "jira.field" : "subtask-parent-id",
+      "userChanged" : "true",
+      "manualMapping" : "true"
+    }
+  },
+  "config.csv.file.id" : null,
+  "config.value.mappings" : {
+    "jira_key" : {
+      "VIDEO-1820" : "VIDEO-1820",
+      "VIDEO-827" : "VIDEO-827"
+    },
+    "id" : {
+      "11919" : "11919",
+      "13008" : "13008"
+    },
+    "parent_id" : {
+      "11919" : "11919"
+    }
+  },
+  "config.delimiter" : ",",
+  "config.project" : {
+    "project.type" : null,
+    "project.key" : "VIDEO",
+    "project.description" : null,
+    "project.url" : null,
+    "project.name" : "Video Production",
+    "project.lead" : null
+  },
+  "config.date.format" : "dd/MMM/yy h:mm a"
+}
